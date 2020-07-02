@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
+import 'bottomNavBar.dart';
+
 
 class Profile extends StatefulWidget {
   @override
@@ -233,29 +234,7 @@ class _ProfileState extends State<Profile> {
             ],
           )
       ),
-      bottomNavigationBar: SnakeNavigationBar(
-        style: SnakeBarStyle.pinned,
-        backgroundColor: Color(0x94FAFAFA),
-        currentIndex: position,
-        onPositionChanged: (index) => setState(() => position = index),
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset('images/Home button.png'),
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset('images/Chat button.png'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset('images/Trophy button.png'),
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset('images/Profile button.png'),
-          )
-        ],
-      ),
+        bottomNavigationBar: BottomNavBar(),
     );
   }
 }
