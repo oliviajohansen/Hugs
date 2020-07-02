@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "428007187098",
+    "firebase_url": "https://hugs-cc8f2.firebaseio.com",
+    "project_id": "hugs-cc8f2",
+    "storage_bucket": "hugs-cc8f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428007187098:android:da5000e4aecd18ef253523",
+        "android_client_info": {
+          "package_name": "com.example.hugsmobileapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "428007187098-r7ot8duraokiqomrhutbq5gr6hisv1au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hugsmobileapp",
+            "certificate_hash": "aedbe9002bbcd75c6cbeadd582dfe48aa9d5fab5"
+          }
+        },
+        {
+          "client_id": "428007187098-5j4b3jsecchjodg89ieg43lqj4v64a9a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOK4dYeUWEfi4n0hzDKezXGPpUAnq6IAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "428007187098-5j4b3jsecchjodg89ieg43lqj4v64a9a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
