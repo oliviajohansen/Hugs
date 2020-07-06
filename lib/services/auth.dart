@@ -3,7 +3,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 
-class Authentication {
+class AuthService {
 
   //final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -80,9 +80,18 @@ class Authentication {
     } catch (error) {
       print(error.toString());
     }
-
-
   }
+
+  //sign out
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch(error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
 
 //  Future<void> gooleSignout() async {
 //    GoogleSignIn _googleSignIn = new GoogleSignIn();

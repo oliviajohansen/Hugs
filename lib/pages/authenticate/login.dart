@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hugsmobileapp/services/authentication.dart';
+import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
 
 class Login extends StatefulWidget {
 
-  Function toggleView;
-  Login({this.toggleView});
+  final Function toggleView;
+  Login({ this.toggleView });
 
   @override
   _LoginState createState() => _LoginState();
@@ -14,7 +14,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  final Authentication _auth = Authentication();
+  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
 
@@ -263,7 +263,9 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget> [
                         GestureDetector(
-                          onTap: () {print('new user tapped');},
+                          onTap: () {
+                            widget.toggleView();
+                            },
                           child: Text('New user? ',
                               style: TextStyle(
                                   fontFamily: 'Poppins',

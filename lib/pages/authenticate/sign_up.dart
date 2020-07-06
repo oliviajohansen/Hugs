@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hugsmobileapp/services/authentication.dart';
+import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
 
 class SignUp extends StatefulWidget {
 
-  Function toggleView;
-  SignUp({this.toggleView});
+  final Function toggleView;
+  SignUp({ this.toggleView });
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -13,7 +13,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
 
-  final Authentication _auth = Authentication();
+  final AuthService _auth = AuthService();
   //identify, validate form, keep track of state of form
   final _formKey = GlobalKey<FormState>();
   String error = '';
@@ -251,7 +251,9 @@ class _SignUpState extends State<SignUp> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget> [
                         GestureDetector(
-                          onTap: () {print('existing user tapped');},
+                          onTap: () {
+                            widget.toggleView();
+                          },
                           child: Text('Existing user? ',
                               style: TextStyle(
                                   fontFamily: 'Poppins',
