@@ -22,6 +22,10 @@ class AuthService {
     return uid;
   }
 
+  createNewDocument(String uid) async {
+    await DatabaseService(uid: uid).updateUserData('Your username');
+  }
+
   //register up with email and password
   Future registerWithEmailAndPassword(String email, String password) async {
     try {
@@ -29,7 +33,7 @@ class AuthService {
       FirebaseUser user = result.user;
 
       //create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).updateUserData('Your username');
+      createNewDocument(user.uid);
       return user;
     } catch (error) {
       print(error.toString());
@@ -62,7 +66,9 @@ class AuthService {
       //final profile = JSON.decode(graphResponse.body);
       print(graphResponse.body);
       final credential = FacebookAuthProvider.getCredential(accessToken: token);
-      _auth.signInWithCredential(credential);
+      AuthResult res = await _auth.signInWithCredential(credential);
+      FirebaseUser user = res.user;
+      createNewDocument(user.uid);
     }
   }
 
@@ -85,7 +91,8 @@ class AuthService {
           accessToken: googleSignInAuthentication.accessToken);
 
       AuthResult result = (await _auth.signInWithCredential(credential));
-
+      FirebaseUser user = result.user;
+      createNewDocument(user.uid);
       print(result.user);
     } catch (error) {
       print(error.toString());
