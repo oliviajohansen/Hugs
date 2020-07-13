@@ -8,6 +8,7 @@ import 'services/auth.dart';
 import 'pages/wrapper.dart';
 //wrap everything with provider to provide user data to every file
 import 'package:provider/provider.dart';
+import 'package:hugsmobileapp/HuggerList.dart';
 
 //
 //void main() => runApp(MaterialApp(
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         home: Wrapper()
+//      home: HuggerList()
       ),
     );
   }

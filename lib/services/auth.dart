@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hugsmobileapp/services/database.dart';
 
 class AuthService {
 
@@ -15,11 +16,20 @@ class AuthService {
     return _auth.onAuthStateChanged;
   }
 
+  Future getUserId() async {
+    final FirebaseUser user = await _auth.currentUser();
+    final uid = user.uid;
+    return uid;
+  }
+
   //register up with email and password
   Future registerWithEmailAndPassword(String email, String password) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
+
+      //create a new document for the user with the uid
+      await DatabaseService(uid: user.uid).updateUserData('Your username');
       return user;
     } catch (error) {
       print(error.toString());
@@ -92,7 +102,6 @@ class AuthService {
     }
   }
 
-
 //  Future<void> gooleSignout() async {
 //    GoogleSignIn _googleSignIn = new GoogleSignIn();
 //
@@ -101,5 +110,13 @@ class AuthService {
 //
 //    });
 //  }
+
+  Future resetPassword(String email) async {
+    try {
+      return await _auth.sendPasswordResetEmail(email: email);
+    } catch (error) {
+      print(error.toString());
+    }
+  }
 
 }

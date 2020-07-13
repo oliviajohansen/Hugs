@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'bottomNavBar.dart';
+import '../bottomNavBar.dart';
 
 class OtherProfile extends StatefulWidget {
   @override
