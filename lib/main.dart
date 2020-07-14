@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/authenticate/authenticate.dart';
 import 'package:hugsmobileapp/pages/authenticate/sign_up.dart';
-import 'pages/view.dart';
+import 'package:hugsmobileapp/pages/chat/chats.dart';
+import 'pages/achievements/view.dart';
 import 'pages/authenticate/login.dart';
 import 'services/auth.dart';
 import 'pages/helper/wrapper.dart';
@@ -30,7 +31,6 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         home: Wrapper()
-//      home: HuggerList()
       ),
     );
   }

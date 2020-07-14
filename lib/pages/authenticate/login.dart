@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
 
@@ -170,12 +171,13 @@ class _LoginState extends State<Login> {
                                 dynamic result = await _auth
                                     .signInWithEmailAndPassword(
                                     emailEditingController.text, passwordEditingController.text);
-                                if (result == null) {
+                                if (result['user'] == null) {
                                   setState(() {
-                                    error = 'Could not sign in with those credentials';
+                                    error = result['error'];
                                   });
-                                  print(error);
                                 } else {
+                                  HelperFunctions.saveUserLoggedIn(true);
+                                  HelperFunctions.saveUserEmail(emailEditingController.text);
                                   print('successful login');
                                 }
                               }

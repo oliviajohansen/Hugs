@@ -18,8 +18,12 @@ class AuthService {
 
   Future getUserId() async {
     final FirebaseUser user = await _auth.currentUser();
-    final uid = user.uid;
-    return uid;
+    if (user != null) {
+      final uid = user.uid;
+      return uid;
+    } else {
+      print('curr user is null');
+    }
   }
 
   //register up with email and password
@@ -30,10 +34,10 @@ class AuthService {
 
       //create a new document for the user with the uid
       DatabaseService(uid: user.uid).createNewDocument();
-      return user;
+      return { 'user': user };
     } catch (error) {
       print(error.toString());
-      return null;
+      return { 'user': null, 'error': error.message };
     }
   }
 
@@ -42,10 +46,10 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
-      return user;
+      return { 'user': user };
     } catch (error) {
       print(error.toString());
-      return null;
+      return { 'user': null, 'error': error.message };
     }
   }
 

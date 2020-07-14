@@ -4,6 +4,9 @@ import 'package:hugsmobileapp/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'homeList.dart';
+import '../helper/helperFunctions.dart';
+import '../helper/constants.dart';
+import '../bottomNavBar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,6 +16,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   final AuthService _auth = AuthService();
+
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
+  getUserInfo() async {
+    Constants.myName = await HelperFunctions.getUsername();
+    print(Constants.myName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +44,8 @@ class _HomeState extends State<Home> {
             )
           ],
         ),
-        body: HomeList()
+        body: HomeList(),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }

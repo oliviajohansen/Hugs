@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
+import 'package:hugsmobileapp/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class SignUp extends StatefulWidget {
 
@@ -158,12 +162,19 @@ class _SignUpState extends State<SignUp> {
                                 onPressed: () async {
                                   if(_formKey.currentState.validate()) {
                                     dynamic result = await _auth.registerWithEmailAndPassword(emailEditingController.text, passwordEditingController.text);
-                                    if(result == null) {
+                                    if(result['user'] == null) {
                                       setState(() {
-                                        error = 'Please supply a valid email';
+                                        error = result['error'];
                                       });
-                                      print(error);
+
                                     } else {
+
+                                      final AuthService _auth = AuthService();
+                                      final userId = await _auth.getUserId();
+
+                                      await DatabaseService(uid: userId).updateUserEmail(emailEditingController.text);
+                                      HelperFunctions.saveUserLoggedIn(true);
+                                      HelperFunctions.saveUserEmail(emailEditingController.text);
                                       print('successfully registered');
                                     }
                                   }

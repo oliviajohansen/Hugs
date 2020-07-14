@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'achievements/achievements.dart';
-import 'leaderboard/leaderboard.dart';
-import 'achievements/achievementHeader.dart';
-import 'bottomNavBar.dart';
+import 'achievements.dart';
+import '../leaderboard/leaderboard.dart';
+import 'achievementHeader.dart';
+import '../bottomNavBar.dart';
 
 
 class ViewPage extends StatefulWidget {
