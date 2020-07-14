@@ -14,13 +14,14 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
 
   final AuthService _auth = AuthService();
+
+  TextEditingController emailEditingController = new TextEditingController();
+  TextEditingController passwordEditingController = new TextEditingController();
+  TextEditingController confirmedPasswordEditingController = new TextEditingController();
+
   //identify, validate form, keep track of state of form
   final _formKey = GlobalKey<FormState>();
   String error = '';
-
-  String email = '';
-  String password = '';
-  String confirmPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +97,7 @@ class _SignUpState extends State<SignUp> {
                                         hintText: "Username or Email",
                                         hintStyle: TextStyle(color: Colors.grey[400])
                                     ),
-                                    onChanged: (val) {
-                                      setState(() => email = val);
-                                    },
+                                    controller: emailEditingController,
                                     validator: (val) => val.isEmpty
                                         ? 'Please enter an email'
                                         : null,
@@ -113,9 +112,7 @@ class _SignUpState extends State<SignUp> {
                                       hintStyle: TextStyle(color: Colors.grey[400])
                                   ),
                                   obscureText: true,
-                                  onChanged: (val) {
-                                    setState(() => password = val);
-                                  },
+                                  controller: passwordEditingController,
                                   validator: (val) => val.length  < 6
                                       ? 'Please enter minimum 6 characters'
                                       : null,
@@ -130,10 +127,8 @@ class _SignUpState extends State<SignUp> {
                                       hintStyle: TextStyle(color: Colors.grey[400])
                                   ),
                                   obscureText: true,
-                                  onChanged: (val) {
-                                    setState(() => confirmPassword = val);
-                                  },
-                                  validator: (val) => val != password
+                                  controller: confirmedPasswordEditingController,
+                                  validator: (val) => val != passwordEditingController.text
                                     ? 'Passwords do not match'
                                     : null,
                                 )
@@ -162,7 +157,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 onPressed: () async {
                                   if(_formKey.currentState.validate()) {
-                                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                                    dynamic result = await _auth.registerWithEmailAndPassword(emailEditingController.text, passwordEditingController.text);
                                     if(result == null) {
                                       setState(() {
                                         error = 'Please supply a valid email';

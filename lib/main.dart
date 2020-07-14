@@ -5,7 +5,7 @@ import 'package:hugsmobileapp/pages/authenticate/sign_up.dart';
 import 'pages/view.dart';
 import 'pages/authenticate/login.dart';
 import 'services/auth.dart';
-import 'pages/wrapper.dart';
+import 'pages/helper/wrapper.dart';
 //wrap everything with provider to provide user data to every file
 import 'package:provider/provider.dart';
 import 'package:hugsmobileapp/HuggerList.dart';

@@ -22,10 +22,6 @@ class AuthService {
     return uid;
   }
 
-  createNewDocument(String uid) async {
-    await DatabaseService(uid: uid).updateUserData('Your username');
-  }
-
   //register up with email and password
   Future registerWithEmailAndPassword(String email, String password) async {
     try {
@@ -33,7 +29,7 @@ class AuthService {
       FirebaseUser user = result.user;
 
       //create a new document for the user with the uid
-      createNewDocument(user.uid);
+      DatabaseService(uid: user.uid).createNewDocument();
       return user;
     } catch (error) {
       print(error.toString());
@@ -68,7 +64,7 @@ class AuthService {
       final credential = FacebookAuthProvider.getCredential(accessToken: token);
       AuthResult res = await _auth.signInWithCredential(credential);
       FirebaseUser user = res.user;
-      createNewDocument(user.uid);
+      DatabaseService(uid: user.uid).createNewDocument();
     }
   }
 
@@ -92,7 +88,7 @@ class AuthService {
 
       AuthResult result = (await _auth.signInWithCredential(credential));
       FirebaseUser user = result.user;
-      createNewDocument(user.uid);
+      DatabaseService(uid: user.uid).createNewDocument();
       print(result.user);
     } catch (error) {
       print(error.toString());
@@ -108,15 +104,6 @@ class AuthService {
       return null;
     }
   }
-
-//  Future<void> gooleSignout() async {
-//    GoogleSignIn _googleSignIn = new GoogleSignIn();
-//
-//    await _auth.signOut().then((onValue) {
-//      _googleSignIn.signOut();
-//
-//    });
-//  }
 
   Future resetPassword(String email) async {
     try {

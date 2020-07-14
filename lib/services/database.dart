@@ -18,4 +18,10 @@ class DatabaseService {
     return userCollection.snapshots();
   }
 
+  createNewDocument() async {
+    await DatabaseService(uid: uid).updateUserData('Your username');
+  }
+
+
+
 }

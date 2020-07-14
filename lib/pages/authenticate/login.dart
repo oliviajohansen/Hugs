@@ -18,8 +18,8 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   String error = '';
 
-  String email = '';
-  String password = '';
+  TextEditingController emailEditingController = new TextEditingController();
+  TextEditingController passwordEditingController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +95,7 @@ class _LoginState extends State<Login> {
                                           hintText: "Username or Email",
                                           hintStyle: TextStyle(color: Colors.grey[400])
                                       ),
-                                    onChanged: (val) {
-                                      setState(() => email = val);
-                                    },
+                                    controller: emailEditingController,
                                     validator: (val) => val.isEmpty
                                         ? 'Please enter an email'
                                         : null,
@@ -112,9 +110,7 @@ class _LoginState extends State<Login> {
                                         hintStyle: TextStyle(color: Colors.grey[400])
                                     ),
                                     obscureText: true,
-                                    onChanged: (val) {
-                                      setState(() => password = val);
-                                    },
+                                    controller: passwordEditingController,
                                     validator: (val) => val.length  < 6
                                         ? 'Please enter minimum 6 characters'
                                         : null,
@@ -173,7 +169,7 @@ class _LoginState extends State<Login> {
                               if (_formKey.currentState.validate()) {
                                 dynamic result = await _auth
                                     .signInWithEmailAndPassword(
-                                    email, password);
+                                    emailEditingController.text, passwordEditingController.text);
                                 if (result == null) {
                                   setState(() {
                                     error = 'Could not sign in with those credentials';
