@@ -1,22 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import '../bottomNavBar.dart';
+import '../helper/constants.dart';
+import '../../services/database.dart';
+import './chatRoom.dart';
 
-class Chat extends StatefulWidget {
+class Chats extends StatefulWidget {
   @override
-  _ChatState createState() => _ChatState();
+  _ChatsState createState() => _ChatsState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatsState extends State<Chats> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   int position = 1;
 
   final names = [
-    'Kristie Zhang',
-    'Rachel Tan',
+    '99dennis',
+    'Olivia2628',
     'Chloe Wong',
     'Ryan Lim',
     'Dominic Neo',
@@ -36,6 +38,35 @@ class _ChatState extends State<Chat> {
     'Harry Lau',
     'Phoenix Cheng'
   ];
+
+  getChatRoomId(String a, String b) {
+    print(a);
+    print(b);
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
+  }
+
+  sendMessage(String username){
+    List<String> users = [Constants.myName, username];
+
+    String chatRoomId = getChatRoomId(Constants.myName, username);
+  print(chatRoomId);
+    Map<String, dynamic> chatRoom = {
+      "users": users,
+      "chatRoomId" : chatRoomId,
+    };
+
+    DatabaseService().createChatRoom(chatRoomId, chatRoom);
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => ChatRoom(
+          chatRoomId: chatRoomId,
+        )
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +95,7 @@ class _ChatState extends State<Chat> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Image.asset('images/Yellow dot.png'),
+                      Image.asset('assets/images/Yellow dot.png'),
                       SizedBox(height: 12)
                     ],
                   )
@@ -78,7 +109,8 @@ class _ChatState extends State<Chat> {
             icon: Column(
               children: <Widget>[
                 SizedBox(height: 18),
-                Image.asset('images/Menu icon.png'),
+//                Image.asset('assets/images/Menu icon.png'),
+                Image.asset('assets/images/bear.png'),
               ],
             ),
             onPressed: () {
@@ -90,7 +122,8 @@ class _ChatState extends State<Chat> {
               icon: Column(
                 children: <Widget>[
                   SizedBox(height: 18),
-                  Image.asset('images/Search icon (black).png'),
+//                  Image.asset('assets/images/Search icon (black).png'),
+                  Image.asset('assets/images/bear.png'),
                 ],
               ),
               onPressed: () {
@@ -116,7 +149,7 @@ class _ChatState extends State<Chat> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         CircleAvatar(
-                          backgroundImage: AssetImage('images/Profile pic.png'),
+                          backgroundImage: AssetImage('assets/images/Profile picture.png'),
                           backgroundColor: Colors.grey[200],
                           radius: 40.0,
                         ),
@@ -250,10 +283,11 @@ class _ChatState extends State<Chat> {
             separatorBuilder: (context, index) => Divider(
               color: Colors.grey[850],
             ),
+            itemCount: names.length,
             itemBuilder: (context, index) {
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage('images/Profile picture (Mocha).png'),
+                  backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
                   backgroundColor: Colors.grey[200],
                   radius: 40,
                 ),
@@ -274,74 +308,15 @@ class _ChatState extends State<Chat> {
                       color: Color(0xff989898)
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  sendMessage(names[index]);
+                },
                 contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
               );
             },
-            itemCount: names.length,
           )
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        index: 1,
-        color: Colors.grey[200],
-        backgroundColor: Color(0x94FAFAFA),
-        buttonBackgroundColor: Color(0xffFFE289),
-        height: 65,
-        items: <Widget>[
-          Image.asset('images/Home button.png',
-            height: 50,
-            width: 50,
-          ),
-          Image.asset('images/Chat button.png',
-            height: 50,
-            width: 50,
-          ),
-          Icon(
-              Icons.add,
-              size: 30,
-              color: Color(0xff7A8FA6)
-          ),
-          Image.asset('images/Trophy button.png',
-            height: 50,
-            width: 50,
-          ),
-          Image.asset('images/Profile button.png',
-            height: 50,
-            width: 50,
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            position = index;
-          });
-        },
-      ),
-//      bottomNavigationBar: SnakeNavigationBar(
-//        style: SnakeBarStyle.pinned,
-//        backgroundColor: Color(0x94FAFAFA),
-//        selectedItemColor: Color(0xffFFC000),
-//        snakeColor: Colors.black,
-//
-//        currentIndex: position,
-//        onPositionChanged: (index) => setState(() => position = index),
-//        items: [
-//          BottomNavigationBarItem(
-//            icon: Image.asset('images/Home button.png'),
-//          ),
-//          BottomNavigationBarItem(
-//            icon: Image.asset('images/Chat button.png'),
-//          ),
-//          BottomNavigationBarItem(
-//            icon: Icon(Icons.add),
-//          ),
-//          BottomNavigationBarItem(
-//            icon: Image.asset('images/Trophy button.png'),
-//          ),
-//          BottomNavigationBarItem(
-//            icon: Image.asset('images/Profile button.png'),
-//          )
-//        ],
-//      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
@@ -424,7 +399,7 @@ class DataSearch extends SearchDelegate<String> {
           showResults(context);
         },
         leading: CircleAvatar(
-          backgroundImage: AssetImage('images/Profile picture (Mocha).png'),
+          backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
           backgroundColor: Colors.grey[200],
           radius: 40,
         ),
