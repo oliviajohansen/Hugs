@@ -4,13 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hugsmobileapp/services/database.dart';
 
+//Handles user authentication
+
 class AuthService {
 
   //final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //auth change stream
-  //triggered upon change in authentication
+  //auth change stream, triggered upon change in authentication
   //value object either FirebaseUser or null
   Stream<FirebaseUser> get user {
     return _auth.onAuthStateChanged;

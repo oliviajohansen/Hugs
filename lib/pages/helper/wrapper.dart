@@ -9,6 +9,8 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    //Listen for changes in authentication, when there is a change,
+    //check if its a logout or login and render pages respectively
     final firebaseUser = Provider.of<FirebaseUser>(context);
 
     if (firebaseUser == null) {

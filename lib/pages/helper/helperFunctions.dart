@@ -7,7 +7,7 @@ class HelperFunctions {
   static String userEmailKey = "USEREMAIL";
 
 
-  // Saving data to shared preferences
+  // Saving data to shared preferences so that every file can access this information
 
   static Future <bool> saveUserLoggedIn(bool isLoggedIn) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

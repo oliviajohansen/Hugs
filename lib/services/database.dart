@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../pages/helper/helperFunctions.dart';
 
+//Handles interaction with database
+
 class DatabaseService {
 
   final String uid;
