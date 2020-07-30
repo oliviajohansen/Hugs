@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
+import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/rendering.dart';
+import '../authenticate/signin_button.dart';
+import '../authenticate/teddy_controller.dart';
+import '../authenticate/tracking_text_input.dart';
+
 
 class Login extends StatefulWidget {
 
@@ -19,175 +26,125 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   String error = '';
 
+  TeddyController _teddyController;
+  @override
+  initState() {
+    _teddyController = TeddyController();
+    super.initState();
+  }
+
+
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    EdgeInsets devicePadding = MediaQuery.of(context).padding;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      backgroundColor: Color.fromRGBO(93, 142, 155, 1.0),
+//      resizeToAvoidBottomInset: false,
       body: Container(
         child: Stack(
           children: <Widget> [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [
-                      0.6,
-                      0.4
-                    ],
-                    colors: [Color(0XffFFE289), Color(0XFFE289)]
-                ),
-              ),
-            ),
-            Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 55.0),
-                  child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Image.asset('assets/images/Hugs logo.png',
-                          height: 80.0,
-                          width: 80.0)
+            Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    // Box decoration takes a gradient
+                    gradient: LinearGradient(
+                      // Where the linear gradient begins and ends
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      // Add one stop for each color. Stops should increase from 0 to 1
+                      stops: [0.0, 1.0],
+                      colors: [
+                        Color.fromRGBO(170, 207, 211, 1.0),
+                        Color.fromRGBO(93, 142, 155, 1.0),
+                      ],
+                    ),
                   ),
-                )
+                )),
+            Positioned.fill(
+              child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                      left: 20.0, right: 20.0, top: devicePadding.top + 50.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                            height: 200,
+                            padding: const EdgeInsets.only(left: 30.0, right:30.0),
+                            child: FlareActor(
+                              "assets/Teddy.flr",
+                              shouldClip: false,
+                              alignment: Alignment.bottomCenter,
+                              fit: BoxFit.contain,
+                              controller: _teddyController,
+                            )),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(25.0))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(30.0),
+                              child: Form(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      TrackingTextInput(
+                                          label: "Email",
+                                          hint: "What's your email address?",
+                                          onCaretMoved: (Offset caret) {
+                                            _teddyController.lookAt(caret);
+                                          }),
+                                      TrackingTextInput(
+                                        label: "Password",
+                                        hint: "Enter your Password",
+                                        isObscured: true,
+                                        onCaretMoved: (Offset caret) {
+                                          _teddyController.coverEyes(caret != null);
+                                          _teddyController.lookAt(null);
+                                        },
+                                        onTextChanged: (String value) {
+                                          _teddyController.setPassword(value);
+                                        },
+                                      ),
+                                      SigninButton(
+                                          child: Text("Sign In",
+                                              style: TextStyle(
+                                                  fontFamily: "RobotoMedium",
+                                                  fontSize: 16,
+                                                  color: Colors.white)),
+                                          onPressed: () async {
+                                            if (_formKey.currentState.validate()) {
+                                              dynamic result = await _auth
+                                                  .signInWithEmailAndPassword(
+                                                  emailEditingController.text, passwordEditingController.text);
+                                              if (result['user'] == null) {
+                                                setState(() {
+                                                  error = result['error'];
+                                                });
+                                              } else {
+                                                HelperFunctions.saveUserLoggedIn(true);
+                                                HelperFunctions.saveUserEmail(emailEditingController.text);
+                                                print('successful login');
+                                              }
+                                            }
+                                          })
+                                    ],
+                                  )),
+                            )),
+                      ])),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 25.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget> [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            blurRadius: 10.0,
-                          )
-                        ]
-                    ),
-                    child: Column(
-                      children: <Widget> [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
-                          child: Text('Welcome to Hugs!',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 28.0,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: <Widget> [
-                              Container(
-                                  padding: EdgeInsets.fromLTRB(25.0, 3.0, 0.0, 5.0),
-                                  decoration: BoxDecoration(
-                                      border: Border(bottom: BorderSide(color: Colors.grey[100]))
-                                  ),
-                                  child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: "Username or Email",
-                                          hintStyle: TextStyle(color: Colors.grey[400])
-                                      ),
-                                    controller: emailEditingController,
-                                    validator: (val) => val.isEmpty
-                                        ? 'Please enter an email'
-                                        : null,
-                                  )
-                              ),
-                              Container(
-                                  padding: EdgeInsets.fromLTRB(25.0, 5.0, 0.0, 3.0),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Password",
-                                        hintStyle: TextStyle(color: Colors.grey[400])
-                                    ),
-                                    obscureText: true,
-                                    controller: passwordEditingController,
-                                    validator: (val) => val.length  < 6
-                                        ? 'Please enter minimum 6 characters'
-                                        : null,
-                                  )
-                              ),
-                           ]
-                          )
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget> [
-                              new GestureDetector(
-                                onTap: () {print('I forgot password');},
-                                child: Text('Forgot Password?',
-                                    style: TextStyle(
-                                        color: Color(0XffFFE289),
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.bold,
-                                        shadows: <Shadow> [
-                                          Shadow(
-                                            offset: Offset(1.3, 1.3),
-                                            color: Colors.grey.withOpacity(0.8),
-                                          )
-                                        ]
-                                    )
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        ButtonTheme(
-                          minWidth: 200,
-                          height: 40,
-                          child: RaisedButton(
-                            child: Text('Login',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0,
-                                    shadows: <Shadow> [
-                                      Shadow(
-                                        offset: Offset(2.5, 2.5),
-                                        color: Colors.grey.withOpacity(0.6),
-                                      )
-                                    ]
-                                )),
-                            color: Color(0XffFFE289),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                dynamic result = await _auth
-                                    .signInWithEmailAndPassword(
-                                    emailEditingController.text, passwordEditingController.text);
-                                if (result['user'] == null) {
-                                  setState(() {
-                                    error = result['error'];
-                                  });
-                                } else {
-                                  HelperFunctions.saveUserLoggedIn(true);
-                                  HelperFunctions.saveUserEmail(emailEditingController.text);
-                                  print('successful login');
-                                }
-                              }
-                            }
-                          ),
-                        ),
-                        SizedBox(height: 10.0)
-                      ],
-                    ),
-                  ),
+
                   Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0)),
                   SizedBox(height: 30.0),
                   Row(
@@ -304,7 +261,7 @@ class _LoginState extends State<Login> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+//      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

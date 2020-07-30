@@ -115,6 +115,6 @@ class AuthService {
     } catch (error) {
       print(error.toString());
     }
-  }
+    }
 
 }
