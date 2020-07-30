@@ -4,6 +4,7 @@ import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
 import 'package:hugsmobileapp/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../helper/constants.dart';
 
 
 class SignUp extends StatefulWidget {
@@ -175,7 +176,9 @@ class _SignUpState extends State<SignUp> {
                                       await DatabaseService(uid: userId).updateUserEmail(emailEditingController.text);
                                       HelperFunctions.saveUserLoggedIn(true);
                                       HelperFunctions.saveUserEmail(emailEditingController.text);
-                                      print('successfully registered');
+                                      String username = await DatabaseService().getUsernameByUserEmail(emailEditingController.text);
+                                      HelperFunctions.saveUsername(username);
+                                      Constants.myUid = await _auth.getUserId();
                                     }
                                   }
                                 },
