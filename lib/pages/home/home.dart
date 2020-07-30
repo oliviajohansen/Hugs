@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
 
   getUserInfo() async {
     Constants.myName = await HelperFunctions.getUsername();
-    print(Constants.myName);
   }
 
   @override

@@ -42,17 +42,20 @@ class DatabaseService {
     await HelperFunctions.saveUsername('Your username');
   }
 
-//  getUserByUsername(String username) async {
-//    return await Firestore.instance.collection('users')
-//        .where('username', isEqualTo: username)
-//        .getDocuments();
-//  }
-//
-//  getUserByUserEmail(String userEmail) async {
-//    return await Firestore.instance.collection('users')
-//        .where('email', isEqualTo: userEmail)
-//        .getDocuments();
-//  }
+  getUserIdByUsername(String username) async {
+    print(username);
+    QuerySnapshot qs = await Firestore.instance.collection('users')
+        .where('username', isEqualTo: username)
+        .getDocuments();
+    return qs.documents[0].documentID;
+  }
+
+  getUsernameByUserEmail(String userEmail) async {
+     QuerySnapshot qs = await userCollection
+        .where('email', isEqualTo: userEmail)
+         .getDocuments();
+     return qs.documents[0]['username'];
+  }
 
   createChatRoom(String charRoomId, chatRoomMap) {
     Firestore.instance.collection('chatRoom')

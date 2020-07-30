@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../bottomNavBar.dart';
 import '../helper/constants.dart';
 import '../../services/database.dart';
 import './chatRoom.dart';
+import '../../services/auth.dart';
 
 class Chats extends StatefulWidget {
   @override
@@ -13,14 +15,16 @@ class Chats extends StatefulWidget {
 class _ChatsState extends State<Chats> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  DatabaseService databaseService = DatabaseService();
+  final AuthService _auth = AuthService();
 
   int position = 1;
 
   final names = [
     '99dennis',
     'Olivia2628',
-    'Chloe Wong',
-    'Ryan Lim',
+    '99dennis99',
+    'Oliviaaa',
     'Dominic Neo',
     'Steve Jobs',
     'Notch Lim',
@@ -49,17 +53,24 @@ class _ChatsState extends State<Chats> {
     }
   }
 
-  sendMessage(String username){
-    List<String> users = [Constants.myName, username];
+  sendMessage(String username) async {
+    String myUid = Constants.myUid;
+    print('myuid');
+    print(myUid);
+    //alternative
+    //String myUid = await databaseService.getUserIdByUsername(Constants.myName);
+    String uid = await databaseService.getUserIdByUsername(username);
+  print('here!');
+  print(uid);
+    List<String> users = [myUid, uid];
+    String chatRoomId = getChatRoomId(myUid, uid);
 
-    String chatRoomId = getChatRoomId(Constants.myName, username);
-  print(chatRoomId);
     Map<String, dynamic> chatRoom = {
       "users": users,
       "chatRoomId" : chatRoomId,
     };
 
-    DatabaseService().createChatRoom(chatRoomId, chatRoom);
+    databaseService.createChatRoom(chatRoomId, chatRoom);
 
     Navigator.push(context, MaterialPageRoute(
         builder: (context) => ChatRoom(

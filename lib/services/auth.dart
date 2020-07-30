@@ -17,13 +17,14 @@ class AuthService {
     return _auth.onAuthStateChanged;
   }
 
-  Future getUserId() async {
+  getUserId() async {
     final FirebaseUser user = await _auth.currentUser();
     if (user != null) {
       final uid = user.uid;
       return uid;
     } else {
       print('curr user is null');
+      return '';
     }
   }
 

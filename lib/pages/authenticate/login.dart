@@ -2,7 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import 'package:hugsmobileapp/services/auth.dart';
+import 'package:hugsmobileapp/services/database.dart';
 import '../bottomNavBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../helper/constants.dart';
+
 
 class Login extends StatefulWidget {
 
@@ -178,7 +182,9 @@ class _LoginState extends State<Login> {
                                 } else {
                                   HelperFunctions.saveUserLoggedIn(true);
                                   HelperFunctions.saveUserEmail(emailEditingController.text);
-                                  print('successful login');
+                                  String username = await DatabaseService().getUsernameByUserEmail(emailEditingController.text);
+                                  HelperFunctions.saveUsername(username);
+                                  Constants.myUid = await _auth.getUserId();
                                 }
                               }
                             }
