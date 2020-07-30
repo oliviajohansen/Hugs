@@ -26,6 +26,15 @@ class _LoginState extends State<Login> {
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
 
+  initStates() async {
+    HelperFunctions.saveUserLoggedIn(true);
+    HelperFunctions.saveUserEmail(emailEditingController.text);
+    String username = await DatabaseService().getUsernameByUserEmail(emailEditingController.text);
+    HelperFunctions.saveUsername(username);
+    Constants.myUid = await _auth.getUserId();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,11 +189,7 @@ class _LoginState extends State<Login> {
                                     error = result['error'];
                                   });
                                 } else {
-                                  HelperFunctions.saveUserLoggedIn(true);
-                                  HelperFunctions.saveUserEmail(emailEditingController.text);
-                                  String username = await DatabaseService().getUsernameByUserEmail(emailEditingController.text);
-                                  HelperFunctions.saveUsername(username);
-                                  Constants.myUid = await _auth.getUserId();
+                                  initStates();
                                 }
                               }
                             }
@@ -237,8 +242,12 @@ class _LoginState extends State<Login> {
                             width: 35.0,
                             height: 35.0,
                             child: InkWell(
-                              onTap: () {
-                                _auth.signInWithFacebook();
+                              onTap: () async {
+                                dynamic res = await _auth.signInWithFacebook();
+                                if (res!= false) {
+                                  emailEditingController.text = res;
+                                  initStates();
+                                };
                               },
                             )
                         ),
@@ -254,8 +263,10 @@ class _LoginState extends State<Login> {
                             width: 35.0,
                             height: 35.0,
                             child: InkWell(
-                              onTap: () {
-                                _auth.signInWithGoogle();
+                              onTap: () async {
+                                if(await _auth.signInWithGoogle()) {
+                                  initStates();
+                                };
                               },
                             )
                         ),
