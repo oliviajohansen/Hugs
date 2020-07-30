@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hugsmobileapp/services/auth.dart';
 import './messageTile.dart';
 import '../helper/constants.dart';
 import '../../services/database.dart';
@@ -18,6 +19,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
+  AuthService _auth = AuthService();
 
   Widget chatMessages(){
     return StreamBuilder(
@@ -28,7 +30,7 @@ class _ChatRoomState extends State<ChatRoom> {
             itemBuilder: (context, index){
               return MessageTile(
                 message: snapshot.data.documents[index].data["message"],
-                sendByMe: Constants.myName == snapshot.data.documents[index].data["sendBy"],
+                sendByMe: Constants.myUid == snapshot.data.documents[index].data["sendBy"],
               );
             }) : Container();
       },
@@ -39,7 +41,8 @@ class _ChatRoomState extends State<ChatRoom> {
     if (messageEditingController.text.isNotEmpty) {
       print(messageEditingController.text);
       Map<String, dynamic> chatMessageMap = {
-        "sendBy": Constants.myName,
+        "name": Constants.myName,
+        "sendBy": Constants.myUid,
         "message": messageEditingController.text,
         'time': DateTime
             .now()
@@ -100,10 +103,10 @@ class _ChatRoomState extends State<ChatRoom> {
                                 color: Colors.black,
                                 fontSize: 16,
                               ),
-                              border: InputBorder.none
+                              border: InputBorder.none,
                           ),
                         )),
-                    SizedBox(width: 16,),
+                    SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {
                         addMessage();
