@@ -31,6 +31,7 @@ class _LoginState extends State<Login> {
     HelperFunctions.saveUserEmail(emailEditingController.text);
     String username = await DatabaseService().getUsernameByUserEmail(emailEditingController.text);
     HelperFunctions.saveUsername(username);
+    Constants.myName = username;
     Constants.myUid = await _auth.getUserId();
   }
 

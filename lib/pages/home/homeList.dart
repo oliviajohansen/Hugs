@@ -24,6 +24,7 @@ class _HomeListState extends State<HomeList> {
     getUID();
   }
 
+
   Future getUID() async {
     final AuthService _auth = AuthService();
     final userId = await _auth.getUserId();
@@ -49,7 +50,7 @@ class _HomeListState extends State<HomeList> {
             maxLength: 20,
             textAlign: TextAlign.center,
             onSubmitted: (val) async {
-              await DatabaseService(uid: uid).updateUserData(val);
+              await DatabaseService(uid: uid).updateUserData(Constants.myName, val);
               await HelperFunctions.saveUsername(_controller.text);
               Constants.myName = await HelperFunctions.getUsername();
             }

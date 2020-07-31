@@ -6,6 +6,8 @@ import '../helper/constants.dart';
 import '../../services/database.dart';
 import './chatRoom.dart';
 import '../../services/auth.dart';
+import './messageController.dart';
+import './dataSearch.dart';
 
 class Chats extends StatefulWidget {
   @override
@@ -16,7 +18,8 @@ class _ChatsState extends State<Chats> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   DatabaseService databaseService = DatabaseService();
-  final AuthService _auth = AuthService();
+  MessageController messageController = new MessageController();
+  Stream<QuerySnapshot> chatList;
 
   int position = 1;
 
@@ -43,41 +46,71 @@ class _ChatsState extends State<Chats> {
     'Phoenix Cheng'
   ];
 
-  getChatRoomId(String a, String b) {
-    print(a);
-    print(b);
-    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
-      return "$b\_$a";
-    } else {
-      return "$a\_$b";
-    }
-  }
 
-  sendMessage(String username) async {
-    String myUid = Constants.myUid;
-    print('myuid');
-    print(myUid);
-    //alternative
-    //String myUid = await databaseService.getUserIdByUsername(Constants.myName);
-    String uid = await databaseService.getUserIdByUsername(username);
-  print('here!');
-  print(uid);
-    List<String> users = [myUid, uid];
-    String chatRoomId = getChatRoomId(myUid, uid);
-
-    Map<String, dynamic> chatRoom = {
-      "users": users,
-      "chatRoomId" : chatRoomId,
-    };
-
-    databaseService.createChatRoom(chatRoomId, chatRoom);
-
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => ChatRoom(
-          chatRoomId: chatRoomId,
+  Widget getChatList() {
+    return StreamBuilder(
+      stream: chatList,
+      builder: (context, snapshot) {
+        print('next stage');
+        print(snapshot);
+        print(snapshot.hasData);
+        return snapshot.hasData ? ListView.separated(
+          separatorBuilder: (context, index) => Divider(
+            color: Colors.grey[850],
+          ),
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) {
+            print(snapshot.data.documents.length);
+            var data = snapshot.data.documents[index].data;
+            String otherUsername = data['usernames'][0] == Constants.myName
+              ? data['usernames'][1]
+              : data['usernames'][0];
+            return
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
+                backgroundColor: Colors.grey[200],
+                radius: 40,
+              ),
+              title: Text(
+                  otherUsername??'',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[850]
+                  )),
+              subtitle: Text(
+                data['lastMessage'] ?? "",
+                style: TextStyle(
+                    fontSize: 14.0,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xff989898)
+                ),
+              ),
+              onTap: () {
+                messageController.startChat(otherUsername, context, false, data['lastMessage']);
+              },
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+            );
+          },
         )
-    ));
+            : Container();
+      }
+    );
   }
+
+  void initState() {
+    databaseService.getChats(Constants.myUid).then((val) => {
+      setState(() => {
+        chatList = val
+      })
+    });
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,25 +149,12 @@ class _ChatsState extends State<Chats> {
           ),
           backgroundColor: Colors.white,
           elevation: 20,
-          leading: IconButton(
-            icon: Column(
-              children: <Widget>[
-                SizedBox(height: 18),
-//                Image.asset('assets/images/Menu icon.png'),
-                Image.asset('assets/images/bear.png'),
-              ],
-            ),
-            onPressed: () {
-              _scaffoldKey.currentState.openDrawer();
-            },
-          ),
           actions: <Widget>[
             IconButton(
               icon: Column(
                 children: <Widget>[
                   SizedBox(height: 18),
-//                  Image.asset('assets/images/Search icon (black).png'),
-                  Image.asset('assets/images/bear.png'),
+                  Image.asset('assets/images/Search icon (black).png')
                 ],
               ),
               onPressed: () {
@@ -144,315 +164,10 @@ class _ChatsState extends State<Chats> {
           ],
         ),
       ),
-      drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  child: DrawerHeader(
-                    decoration: BoxDecoration(
-                        color: Color(0xffFFC000)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/Profile picture.png'),
-                          backgroundColor: Colors.grey[200],
-                          radius: 40.0,
-                        ),
-                        SizedBox(height: 10.0),
-                        Text(
-                          'Sarah Tan',
-                          style: TextStyle(
-                              fontSize: 21.0,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white
-                          ),
-                        ),
-                        Text(
-                          'Life Lover',
-                          style: TextStyle(
-                            fontSize: 14.5,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: ListView(
-                  padding: EdgeInsets.all(0),
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.group),
-                      title: Text(
-                        'New Group',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[850]
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(
-                        'Contacts',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[850]
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.bookmark_border),
-                      title: Text(
-                        'Saved Messages',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[850]
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.settings),
-                      title: Text(
-                        'Settings',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[850]
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.person_add),
-                      title: Text(
-                        'Invite Friends',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[850]
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.comment),
-                      title: Text(
-                        'Hugs FAQ',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[850]
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
-          )
-      ),
       body: SafeArea(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              color: Colors.grey[850],
-            ),
-            itemCount: names.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
-                  backgroundColor: Colors.grey[200],
-                  radius: 40,
-                ),
-                title: Text(
-                    '${names[index]}',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[850]
-                    )),
-                subtitle: Text(
-                  'Hello ru there?',
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff989898)
-                  ),
-                ),
-                onTap: () {
-                  sendMessage(names[index]);
-                },
-                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
-              );
-            },
-          )
+          child: getChatList()
       ),
       bottomNavigationBar: BottomNavBar(),
-    );
-  }
-}
-
-class DataSearch extends SearchDelegate<String> {
-
-  final names = [
-    'Kristie Zhang',
-    'Rachel Tan',
-    'Chloe Wong',
-    'Ryan Lim',
-    'Dominic Neo',
-    'Steve Jobs',
-    'Notch Lim',
-    'Melvin Lim',
-    'Clarrisa Tan',
-    'Jason Cheng',
-    'Michelle Tan',
-    'Zoe Tay',
-    'Maybelline Neo',
-    'Justina Tay',
-    'Priscilla Lau',
-    'Sharon Sim',
-    'Joe Doe',
-    'Tom Lau',
-    'Harry Lau',
-    'Phoenix Cheng'
-  ];
-
-  final recentNames = [
-    'Jason Cheng',
-    'Michelle Tan',
-    'Zoe Tay'
-  ];
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    // actions for AppBar
-    return [
-      IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            query = '';
-          }
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    // leading icon on the left of AppBar
-    return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // shows some result based on the selection
-    return Text(
-        query
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // shows when someone searches for something
-    final suggestionList = query.isEmpty
-        ? recentNames
-        : names.where((p) => p.startsWith(query)).toList();
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-        onTap: () {
-          showResults(context);
-        },
-        leading: CircleAvatar(
-          backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
-          backgroundColor: Colors.grey[200],
-          radius: 40,
-        ),
-        title: RichText(
-            text: TextSpan(
-                text: suggestionList[index].substring(0, query.length),
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontFamily: 'Poppins',
-                    color: Colors.grey[850],
-                    fontWeight: FontWeight.w600
-                ),
-                children: [TextSpan(
-                    text: suggestionList[index].substring(query.length),
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontFamily: 'Poppins',
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w600
-                    )
-                )]
-            )
-        ),
-        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
-      ),
-      itemCount: suggestionList.length,
-    );
-  }
-
-  @override
-  ThemeData appBarTheme(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    return ThemeData(
-        primaryColor: Color(0xffFFE289),
-        textTheme: TextTheme(
-            title: TextStyle(
-                fontSize: 21.0,
-                fontFamily: 'Poppins',
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-            )
-        )
     );
   }
 }
