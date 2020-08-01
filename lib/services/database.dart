@@ -56,15 +56,6 @@ class DatabaseService {
         .where('email', isEqualTo: userEmail)
          .getDocuments();
      return qs.documents[0]['username'];
-
-//  String username = '';
-//    await userCollection
-//        .where('email', isEqualTo: userEmail)
-//         .getDocuments()
-//        .then((docs) =>
-//          username = docs.documents[0]['username']
-//        );
-
   }
 
   getUsernameByUid(String uid) async {
@@ -104,28 +95,6 @@ class DatabaseService {
         .collection("chatRoom")
         .where('users', arrayContains: uid)
         .snapshots();
-//        in chats init state, reaches .then(val => ... before get chats is resolved
-//        .forEach((documents) async {
-//          return await getUpdatedUsername(documents);
-//        });
-  }
-
-  int index = 0;
-
-  Future getUpdatedUsername(snapshot) async {
-    var chatRoom = snapshot.documents[index].data;
-    var usersArr = chatRoom['users'];
-    String otherId = usersArr[0];
-    if(usersArr[0] == Constants.myUid) {
-      otherId = usersArr[1];
-    }
-    String updatedOtherUsername = await getUsernameByUid(otherId);
-    print('other');
-    print(updatedOtherUsername);
-    index++;
-    return {
-      'chatRoom': chatRoom, 'otherUsername': updatedOtherUsername
-    };
   }
 
   Future<void> addMessage(String chatRoomId, chatMessageData, message){

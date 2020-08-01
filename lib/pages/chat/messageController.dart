@@ -23,12 +23,10 @@ class MessageController {
     //String myUid = await databaseService.getUserIdByUsername(Constants.myName);
     String uid = await databaseService.getUserIdByUsername(username);
     List<String> users = [myUid, uid];
-    List<String> usernames = [Constants.myName, username];
     String chatRoomId = getChatRoomId(myUid, uid);
 
     Map<String, dynamic> chatRoom = {
       "users": users,
-      "usernames": usernames,
       "chatRoomId" : chatRoomId,
       "lastMessage": lastMessage
     };

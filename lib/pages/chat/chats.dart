@@ -50,56 +50,66 @@ class _ChatsState extends State<Chats> {
   Widget getChatList() {
     return StreamBuilder(
       stream: chatList,
-      builder: (context, snapshot) {
-        print('next stage');
-        print(snapshot);
-        print(snapshot.hasData);
-        return snapshot.hasData ? ListView.separated(
-          separatorBuilder: (context, index) => Divider(
-            color: Colors.grey[850],
-          ),
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: (context, index) {
-            print(snapshot.data.documents.length);
-            var data = snapshot.data.documents[index].data;
-            String otherUsername = data['usernames'][0] == Constants.myName
-              ? data['usernames'][1]
-              : data['usernames'][0];
-            return
-            ListTile(
-              leading: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
-                backgroundColor: Colors.grey[200],
-                radius: 40,
-              ),
-              title: Text(
-                  otherUsername??'',
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[850]
-                  )),
-              subtitle: Text(
-                data['lastMessage'] ?? "",
-                style: TextStyle(
-                    fontSize: 14.0,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xff989898)
-                ),
-              ),
-              onTap: () {
-                messageController.startChat(otherUsername, context, false, data['lastMessage']);
+      builder: (context, chatListSnapshot) {
+        return chatListSnapshot.hasData ?
+        ListView(
+//          separatorBuilder: (context, index) => Divider(
+//            color: Colors.grey[850],
+//          ),
+//          itemCount: chatListSnapshot.data.documents.length,
+//          itemBuilder: (context, index) {
+            children: chatListSnapshot.data.documents.map<Widget>((chatData) {
+              String otherId = (chatData != null) ? chatData['users'][0] == Constants.myUid
+                  ? chatData['users'][1]
+                  : chatData['users'][0]
+                  : '';
+                return StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('users')
+                      .document(otherId)
+                      .snapshots(),
+                  builder: (context, userSnapshot) {
+                    return userSnapshot.hasData ?
+                      ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
+                          backgroundColor: Colors.grey[200],
+                          radius: 40,
+                        ),
+                        title: Text(
+                            userSnapshot.data['username']??'',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[850]
+                          )
+                        ),
+                          subtitle: Text(
+                            chatData['lastMessage'] ?? "",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xff989898)
+                            ),
+                        ),
+                        onTap: () {
+                          messageController.startChat(userSnapshot.data['username'], context, false, chatData['lastMessage']);
+                       },
+                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                      )
+                  : Container();
               },
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
-            );
-          },
-        )
+          );
+        }).toList())
             : Container();
       }
     );
-  }
+
+    }
+
+
 
   void initState() {
     databaseService.getChats(Constants.myUid).then((val) => {
