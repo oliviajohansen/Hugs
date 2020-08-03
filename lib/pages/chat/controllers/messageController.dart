@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../helper/constants.dart';
-import '../../services/database.dart';
-import './chatRoom.dart';
+import '../../helper/constants.dart';
+import '../../../services/database.dart';
+import '../chatRoom.dart';
 
 class MessageController {
 
@@ -41,6 +41,5 @@ class MessageController {
         )
     ));
   }
-
 
 }

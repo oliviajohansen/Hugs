@@ -6,7 +6,7 @@ import '../helper/constants.dart';
 import '../../services/database.dart';
 import './chatRoom.dart';
 import '../../services/auth.dart';
-import './messageController.dart';
+import 'controllers/messageController.dart';
 import './dataSearch.dart';
 
 class Chats extends StatefulWidget {
