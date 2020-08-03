@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../pages/helper/helperFunctions.dart';
 import '../pages/helper/constants.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 //Handles interaction with database
 
@@ -111,6 +113,20 @@ class DatabaseService {
       print(e.toString());
     });
 
+  }
+
+  Future<String> saveImageInChatRoomStorage(croppedFile,chatID) async {
+    try {
+      String imageTimeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+      String filePath = 'chatrooms/$chatID/$imageTimeStamp';
+      final StorageReference storageReference = FirebaseStorage().ref().child(filePath);
+      final StorageUploadTask uploadTask = storageReference.putFile(croppedFile);
+      StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+      String result = await storageTaskSnapshot.ref.getDownloadURL();
+      return result;
+    }catch(e) {
+      print(e.message);
+    }
   }
 
   getUserChats(String myName) async {

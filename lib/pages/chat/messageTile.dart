@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import './fullphoto.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MessageTile extends StatelessWidget {
 
   final String message;
   final bool sendByMe;
   final int time;
+  final bool isText;
+  final context;
 
-  MessageTile({@required this.message, @required this.sendByMe, this.time});
+  MessageTile({@required this.message, @required this.sendByMe, @required this.time, @required this.isText, this.context});
+
+  Widget _imageMessage(imageUrlFromFB) {
+    return Container(
+      width: 160,
+      height: 160,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => FullPhoto(url: imageUrlFromFB)));
+        },
+        child: CachedNetworkImage(
+          imageUrl: imageUrlFromFB,
+          placeholder: (context, url) => Container(
+            transform: Matrix4.translationValues(0, 0, 0),
+            child: Container( width: 60, height: 80,
+                child: Center(child: new CircularProgressIndicator())),
+          ),
+          errorWidget: (context, url, error) => new Icon(Icons.error),
+          width: 60,
+          height: 80,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
 
 
   @override
@@ -52,14 +84,16 @@ class MessageTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: sendByMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
           children: <Widget>[
-            Text(message,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w300)
-            ),
+            isText
+              ? Text(message,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'OverpassRegular',
+                  fontWeight: FontWeight.w300)
+              )
+              : _imageMessage(message),
             Text(formattedTime,
               textAlign: TextAlign.start,
               style: TextStyle(
