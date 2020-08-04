@@ -169,7 +169,7 @@ class _ChatRoomState extends State<ChatRoom> {
                     GestureDetector(
                       onTap: () {
                         bool isText = true;
-                        if (messageEditingController.text != '') {
+                        if (messageEditingController.text == '') {
                           isText = false;
                         }
                         addMessage(isText, messageEditingController.text);

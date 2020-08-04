@@ -18,6 +18,7 @@ class Wrapper extends StatelessWidget {
     if (firebaseUser == null) {
       return Authenticate();
     } else {
+      //check if first time user
       return Home();
     }
   }
