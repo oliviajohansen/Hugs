@@ -13,20 +13,20 @@ class _OtherProfileState extends State<OtherProfile> {
   bool isHugsDelivered = true;
 
   List<String> imgsHugsDelivered = [
-    'images/A.jpg',
-    'images/B.jpg',
-    'images/C.jpg',
-    'images/D.jpg',
-    'images/Heart.png',
-    'images/Hug 1.png',
-    'images/Hug 2.png',
-    'images/Profile pic.png',
-    'images/Settings icon.png'
+    'assets/images/A.jpg',
+    'assets/images/B.jpg',
+    'assets/images/C.jpg',
+    'assets/images/D.jpg',
+    'assets/images/Heart.png',
+    'assets/images/Hug 1.png',
+    'assets/images/Hug 2.png',
+    'assets/images/Profile pic.png',
+    'assets/images/Settings icon.png'
   ];
 
   List<String> imgsHugsReceived = [
-    'images/Hug 1.png',
-    'images/Hug 2.png'
+    'assets/images/Hug 1.png',
+    'assets/images/Hug 2.png'
   ];
 
   @override
@@ -43,7 +43,7 @@ class _OtherProfileState extends State<OtherProfile> {
                     child: IconButton(
                         onPressed: () {},
                         icon: Image.asset(
-                            'images/Settings icon.png',
+                            'assets/images/Settings icon.png',
                             scale: 15)
                     )
                 ),
@@ -57,7 +57,7 @@ class _OtherProfileState extends State<OtherProfile> {
                       Column(
                           children: <Widget> [
                             CircleAvatar(
-                              backgroundImage: AssetImage('images/Profile picture (Mocha).png'),
+                              backgroundImage: AssetImage('assets/images/Profile picture (Mocha).png'),
                               backgroundColor: Color(0xffE8E7E7),
                               radius: 121/2,
                             ),

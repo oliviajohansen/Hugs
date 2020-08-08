@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
+import 'package:hugsmobileapp/pages/home/homeList.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
 import 'package:hugsmobileapp/services/database.dart';
@@ -40,8 +41,8 @@ class _SignUpState extends State<SignUp> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     stops: [
-                      0.6,
-                      0.4
+                      0.5,
+                      0.5
                     ],
                     colors: [Color(0XffFFE289), Color(0XFFE289)]
                 ),
@@ -49,7 +50,7 @@ class _SignUpState extends State<SignUp> {
             ),
             Container(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 55.0),
+                  padding: const EdgeInsets.only(top: 200.0),
                   child: Align(
                       alignment: Alignment.topCenter,
                       child: Image.asset('assets/images/Hugs logo.png',
@@ -59,7 +60,7 @@ class _SignUpState extends State<SignUp> {
                 )
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 25.0),
+              padding: EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 150.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget> [
@@ -166,9 +167,7 @@ class _SignUpState extends State<SignUp> {
                                       setState(() {
                                         error = result['error'];
                                       });
-
                                     } else {
-
                                       final AuthService _auth = AuthService();
                                       final userId = await _auth.getUserId();
 
@@ -176,6 +175,9 @@ class _SignUpState extends State<SignUp> {
                                       HelperFunctions.saveUserLoggedIn(true);
                                       HelperFunctions.saveUserEmail(emailEditingController.text);
                                       print('successfully registered');
+                                      Navigator.pushReplacement(context, MaterialPageRoute(
+                                          builder: (context) => HomeList())
+                                      );
                                     }
                                   }
                                 },
@@ -300,7 +302,7 @@ class _SignUpState extends State<SignUp> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+//      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
