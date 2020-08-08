@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
-import 'package:hugsmobileapp/pages/profile/settings.dart';
+
 
 class Profile extends StatefulWidget {
   @override
@@ -11,51 +9,26 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  String uid;
-  Map<String, dynamic> userData;
-  String storedUsername = '';
-  String storedProfilePic = '';
-  String storedBio = '';
-
   int position = 4;
+
   bool isHugsDelivered = true;
 
   List<String> imgsHugsDelivered = [
-    'assets/images/A.jpg',
-    'assets/images/B.jpg',
-    'assets/images/C.jpg',
-    'assets/images/D.jpg',
-    'assets/images/Heart.png',
-    'assets/images/Hug 1.png',
-    'assets/images/Hug 2.png',
-    'assets/images/Profile pic.png',
-    'assets/images/Settings icon.png'
+    'images/A.jpg',
+    'images/B.jpg',
+    'images/C.jpg',
+    'images/D.jpg',
+    'images/Heart.png',
+    'images/Hug 1.png',
+    'images/Hug 2.png',
+    'images/Profile pic.png',
+    'images/Settings icon.png'
   ];
 
   List<String> imgsHugsReceived = [
-    'assets/images/Hug 1.png',
-    'assets/images/Hug 2.png'
+    'images/Hug 1.png',
+    'images/Hug 2.png'
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    getUID();
-  }
-
-  Future getUID() async {
-    final AuthService _auth = AuthService();
-    final userId = await _auth.getUserId();
-    final user = await Firestore.instance.collection('users').document(userId).get();
-
-    setState(() {
-      uid = userId;
-      userData = user.data;
-      storedUsername = userData['username'];
-      storedProfilePic = userData['profilePic'];
-      storedBio = userData['bio'];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,16 +42,9 @@ class _ProfileState extends State<Profile> {
                 child: Container(
                     padding: EdgeInsets.all(30.0),
                     child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                              builder: (context) => Settings()
-                              ),
-                          );
-                        },
+                        onPressed: () {},
                         icon: Image.asset(
-                            'assets/images/Settings icon.png',
+                            'images/Settings icon.png',
                             scale: 15)
                     )
                 ),
@@ -92,7 +58,7 @@ class _ProfileState extends State<Profile> {
                       Column(
                           children: <Widget> [
                             CircleAvatar(
-//                              backgroundImage: NetworkImage(storedProfilePic),
+                              backgroundImage: AssetImage('images/Profile pic.png'),
                               backgroundColor: Color(0xffE8E7E7),
                               radius: 121/2,
                             ),
@@ -146,7 +112,7 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            storedUsername,
+                            'Sarah Tan',
                             style: TextStyle(
                               fontSize: 21.0,
                               fontFamily: 'Poppins',
@@ -163,7 +129,7 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           Text(
-                            storedBio,
+                            'Hello, nice to meet you!',
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Poppins',

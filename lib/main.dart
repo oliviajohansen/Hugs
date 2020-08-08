@@ -11,27 +11,27 @@ import 'pages/helper/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:hugsmobileapp/HuggerList.dart';
 
-
-void main() => runApp(MaterialApp(
-    initialRoute: '/authenticate',
-    routes: {
-      '/login': (context) => Login(),
-      '/view': (context) => ViewPage(),
-      '/signup': (context) => SignUp(),
-      '/authenticate': (context) => Authenticate()
-    }
-));
-
-//void main() => runApp(MyApp());
 //
-//class MyApp extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return StreamProvider<FirebaseUser>.value(
-//      value: AuthService().user,
-//      child: MaterialApp(
-//        home: Wrapper()
-//      ),
-//    );
-//  }
-//}
+//void main() => runApp(MaterialApp(
+//    initialRoute: '/authenticate',
+//    routes: {
+//      '/login': (context) => Login(),
+//      '/view': (context) => ViewPage(),
+//      '/signup': (context) => SignUp(),
+//      '/authenticate': (context) => Authenticate()
+//    }
+//));
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamProvider<FirebaseUser>.value(
+      value: AuthService().user,
+      child: MaterialApp(
+        home: Wrapper()
+      ),
+    );
+  }
+}

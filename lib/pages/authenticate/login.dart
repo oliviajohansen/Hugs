@@ -1,10 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
-import 'package:hugsmobileapp/pages/home/homeList.dart';
-import 'package:hugsmobileapp/pages/authenticate/reset.dart';
-import 'package:hugsmobileapp/pages/profile/my_profile.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
 
@@ -22,30 +18,9 @@ class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
-  String uid;
-  Map<String, dynamic> userData;
-  String storedUsername = '';
 
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    getUID();
-  }
-
-  Future getUID() async {
-    final AuthService _auth = AuthService();
-    final userId = await _auth.getUserId();
-    final user = await Firestore.instance.collection('users').document(userId).get();
-
-    setState(() {
-      uid = userId;
-      userData = user.data;
-      storedUsername = userData['username'];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +35,8 @@ class _LoginState extends State<Login> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     stops: [
-                      0.5,
-                      0.5
+                      0.6,
+                      0.4
                     ],
                     colors: [Color(0XffFFE289), Color(0XFFE289)]
                 ),
@@ -69,7 +44,7 @@ class _LoginState extends State<Login> {
             ),
             Container(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 200.0),
+                  padding: const EdgeInsets.only(top: 55.0),
                   child: Align(
                       alignment: Alignment.topCenter,
                       child: Image.asset('assets/images/Hugs logo.png',
@@ -79,7 +54,7 @@ class _LoginState extends State<Login> {
                 )
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 150.0),
+              padding: EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 25.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget> [
@@ -151,11 +126,7 @@ class _LoginState extends State<Login> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget> [
                               new GestureDetector(
-                                onTap: () async {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(
-                                      builder: (context) => Reset())
-                                  );
-                                  },
+                                onTap: () {print('I forgot password');},
                                 child: Text('Forgot Password?',
                                     style: TextStyle(
                                         color: Color(0XffFFE289),
@@ -208,19 +179,6 @@ class _LoginState extends State<Login> {
                                   HelperFunctions.saveUserLoggedIn(true);
                                   HelperFunctions.saveUserEmail(emailEditingController.text);
                                   print('successful login');
-//                                  if (storedUsername == "Your username") {
-//                                    print("new user");
-//                                    print(storedUsername);
-//                                    Navigator.pushReplacement(context, MaterialPageRoute(
-//                                        builder: (context) => HomeList())
-//                                    );
-//                                  } else {
-                                    print("current user");
-                                    print(storedUsername);
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => Profile())
-                                    );
-//                                  }
                                 }
                               }
                             }
@@ -230,7 +188,6 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10.0),
                   Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0)),
                   SizedBox(height: 30.0),
                   Row(
@@ -347,7 +304,7 @@ class _LoginState extends State<Login> {
           ],
         ),
       ),
-//      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

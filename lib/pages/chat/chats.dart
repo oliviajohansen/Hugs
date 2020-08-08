@@ -121,7 +121,7 @@ class _ChatsState extends State<Chats> {
             IconButton(
               icon: Column(
                 children: <Widget>[
-                  SizedBox(height: 8),
+                  SizedBox(height: 18),
 //                  Image.asset('assets/images/Search icon (black).png'),
                   Image.asset('assets/images/bear.png'),
                 ],
