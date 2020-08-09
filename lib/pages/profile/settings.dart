@@ -164,10 +164,22 @@ class _SettingsState extends State<Settings> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(height: 15),
-                    CircleAvatar(
-//                      backgroundImage: NetworkImage(storedProfilePic),
-                      backgroundColor: Color(0xffE8E7E7),
-                      radius: 121/2,
+                    StreamBuilder<DocumentSnapshot>(
+                      stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        String dp = '';
+                        try {
+                          dp = snapshot.data["profilePic"];
+                        } catch (Exception) {}
+                        if (snapshot.data == null) return CircularProgressIndicator();
+                        return CircleAvatar(
+                          backgroundImage: dp.isNotEmpty
+                              ? NetworkImage(dp)
+                              : CircularProgressIndicator(),
+                          backgroundColor: Color(0xffE8E7E7),
+                          radius: 121/2,
+                        );
+                      }
                     ),
                     SizedBox(height: 15),
 //                    FlatButton(
@@ -217,14 +229,24 @@ class _SettingsState extends State<Settings> {
                                     fontWeight: FontWeight.w500
                                 ),
                               ),
-                              subtitle: Text(
-                                storedUsername,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w400
-                                ),
+                              subtitle: StreamBuilder<DocumentSnapshot>(
+                                stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  String username = '';
+                                  try {
+                                    username = snapshot.data["username"];
+                                  } catch (Exception) {}
+                                  if (snapshot.data == null) return CircularProgressIndicator();
+                                  return Text(
+                                    username,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  );
+                                }
                               ),
                               leading: Icon(Icons.person_outline, color: Color(0xffFFC000),),
                               trailing: Icon(Icons.keyboard_arrow_right),
@@ -247,14 +269,24 @@ class _SettingsState extends State<Settings> {
                                     fontWeight: FontWeight.w500
                                 ),
                               ),
-                              subtitle: Text(
-                                storedBio,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w400
-                                ),
+                              subtitle: StreamBuilder<DocumentSnapshot>(
+                                stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  String bio = '';
+                                  try {
+                                    bio = snapshot.data["bio"];
+                                  } catch (Exception) {}
+                                  if (snapshot.data == null) return CircularProgressIndicator();
+                                  return Text(
+                                    bio,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  );
+                                }
                               ),
                               leading: Icon(Icons.chat_bubble_outline, color: Color(0xffFFC000),),
                               trailing: Icon(Icons.keyboard_arrow_right),

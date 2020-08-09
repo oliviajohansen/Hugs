@@ -96,20 +96,26 @@ class _ChangePasswordState extends State<ChangePassword> {
               print("Auth Credential: ${authCredential.toString()}");
               user.reauthenticateWithCredential(authCredential).then((result) {
                 setState(() {
-                  error = "Success: $result";
+                  error = "Authentication Success!";
                 });
-                user.updatePassword(_newPassword).then((result) {
-                  setState(() {
-                    error = "Password updated.";
+                if (_newPassword2 == _newPassword) {
+                  user.updatePassword(_newPassword).then((result) {
+                    setState(() {
+                      error = "Password had been updated successfully.";
+                    });
+                  }).catchError((result) {
+                    setState(() {
+                      error = "An error occurred while changing the password: " + result.message;
+                    });
                   });
-                }).catchError((result) {
+                } else {
                   setState(() {
-                    error = "An error occurred while changing the password: " + result.message;
+                    error = "An error occurred while changing the password: Your new passwords are mismatched.";
                   });
-                });
+                }
               }).catchError((result) {
                 setState(() {
-                  error = "[Old Password] " + result.message;
+                  error = "Authentication Failure: Your old password is invalid.";
                 });
               });
             },
@@ -223,7 +229,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                   ),
                   obscureText: true,
-                  validator: (val) => val.isEmpty ? 'Enter your new password.' : null,
+                  validator: (val) => val.length  < 6
+                      ? 'Please enter minimum 6 characters'
+                      : null,
                   onChanged: (val) {
                     _newPassword = val;
                   },
@@ -277,12 +285,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                   ),
                   obscureText: true,
-                  validator: (val) => val.isEmpty ? 'Enter your new password.' : null,
+                  validator: (val) => val.length  < 6
+                      ? 'Please enter minimum 6 characters'
+                      : null,
                   onChanged: (val) {
                     _newPassword2 = val;
-                    if (_newPassword2 == _newPassword) {
-                      print("new password matched");
-                    } else {}
                   },
                 ),
               ),
