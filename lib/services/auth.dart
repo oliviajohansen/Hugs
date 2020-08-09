@@ -114,7 +114,7 @@ class AuthService {
       return await _auth.sendPasswordResetEmail(email: email);
     } catch (error) {
       print(error.toString());
+      return { 'user': null, 'error': error.message };
     }
   }
-
 }
