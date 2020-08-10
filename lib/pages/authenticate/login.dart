@@ -6,7 +6,11 @@ import 'package:hugsmobileapp/pages/home/homeList.dart';
 import 'package:hugsmobileapp/pages/authenticate/reset.dart';
 import 'package:hugsmobileapp/pages/profile/my_profile.dart';
 import 'package:hugsmobileapp/services/auth.dart';
+import 'package:hugsmobileapp/services/database.dart';
 import '../bottomNavBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../helper/constants.dart';
+
 
 class Login extends StatefulWidget {
 
@@ -28,6 +32,16 @@ class _LoginState extends State<Login> {
 
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
+
+  initStates() async {
+    HelperFunctions.saveUserLoggedIn(true);
+    HelperFunctions.saveUserEmail(emailEditingController.text);
+    String username = await DatabaseService().getUsernameByUserEmail(emailEditingController.text);
+    HelperFunctions.saveUsername(username);
+    Constants.myName = username;
+    Constants.myUid = await _auth.getUserId();
+  }
+
 
   @override
   void initState() {
@@ -274,8 +288,12 @@ class _LoginState extends State<Login> {
                             width: 35.0,
                             height: 35.0,
                             child: InkWell(
-                              onTap: () {
-                                _auth.signInWithFacebook();
+                              onTap: () async {
+                                dynamic res = await _auth.signInWithFacebook();
+                                if (res!= false) {
+                                  emailEditingController.text = res;
+                                  initStates();
+                                };
                               },
                             )
                         ),
@@ -291,8 +309,10 @@ class _LoginState extends State<Login> {
                             width: 35.0,
                             height: 35.0,
                             child: InkWell(
-                              onTap: () {
-                                _auth.signInWithGoogle();
+                              onTap: () async {
+                                if(await _auth.signInWithGoogle()) {
+                                  initStates();
+                                };
                               },
                             )
                         ),

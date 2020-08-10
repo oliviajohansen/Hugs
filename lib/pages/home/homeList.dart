@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hugsmobileapp/pages/chat/chats.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import 'package:hugsmobileapp/services/database.dart';
 import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
@@ -196,6 +197,16 @@ class _HomeListState extends State<HomeList> {
                     size: 50.0,
                   ),
                   shape: CircleBorder(),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(context, MaterialPageRoute(
+                        builder: (context) => Chats())
+                    );
+                  },
+                  child: Text(
+                      "Temporary button to chat",
+                  ),
                 ),
               ],
             ),

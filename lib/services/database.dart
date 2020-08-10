@@ -1,5 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../pages/helper/helperFunctions.dart';
+import '../pages/helper/constants.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+
+//Handles interaction with database
 
 class DatabaseService {
 
@@ -15,7 +20,7 @@ class DatabaseService {
     });
   }
 
-  Future updateUserData(String username) async {
+  Future updateUserData(String originalName, String username) async {
     return await userCollection.document(uid).updateData({
       'username': username
     });
@@ -52,27 +57,46 @@ class DatabaseService {
     await HelperFunctions.saveUsername('Your username');
   }
 
-//  getUserByUsername(String username) async {
-//    return await Firestore.instance.collection('users')
-//        .where('username', isEqualTo: username)
-//        .getDocuments();
-//  }
-//
-//  getUserByUserEmail(String userEmail) async {
-//    return await Firestore.instance.collection('users')
-//        .where('email', isEqualTo: userEmail)
-//        .getDocuments();
-//  }
+  getUserIdByUsername(String username) async {
+    print(username);
+    QuerySnapshot qs = await Firestore.instance.collection('users')
+        .where('username', isEqualTo: username)
+        .getDocuments();
+    return qs.documents[0].documentID;
+  }
+
+  getUsernameByUserEmail(String userEmail) async {
+     QuerySnapshot qs = await userCollection
+        .where('email', isEqualTo: userEmail)
+         .getDocuments();
+     return qs.documents[0]['username'];
+  }
+
+  getUsernameByUid(String uid) async {
+    return await userCollection
+        .document(uid)
+        .get() //get a Document Reference
+        .then((documentSnapshot) =>
+           documentSnapshot['username']
+        );
+  }
 
   createChatRoom(String charRoomId, chatRoomMap) {
+    Firestore.instance.collection('chatRoom')
+        .document(charRoomId).updateData(chatRoomMap).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  openChatRoom(String charRoomId, chatRoomMap) {
     Firestore.instance.collection('chatRoom')
         .document(charRoomId).setData(chatRoomMap).catchError((e) {
       print(e.toString());
     });
   }
 
-  getChats(String chatRoomId) async{
-    return Firestore.instance
+  getMessages(String chatRoomId) async{
+    return await Firestore.instance
         .collection("chatRoom")
         .document(chatRoomId)
         .collection("chats")
@@ -80,19 +104,47 @@ class DatabaseService {
         .snapshots();
   }
 
-  Future<void> addMessage(String chatRoomId, chatMessageData){
+  getChats(String uid) async {
+    return await Firestore.instance
+        .collection("chatRoom")
+        .where('users', arrayContains: uid)
+        .snapshots();
+  }
+
+  Future<void> addMessage(String chatRoomId, chatMessageData, message){
     Firestore.instance.collection("chatRoom")
         .document(chatRoomId)
         .collection("chats")
         .add(chatMessageData).catchError((e){
       print(e.toString());
     });
+
+    Firestore.instance.collection("chatRoom")
+        .document(chatRoomId)
+        .updateData({ 'lastMessage': message }).catchError((e){
+      print(e.toString());
+    });
+
   }
 
-  getUserChats(String itIsMyName) async {
+  Future<String> saveImageInChatRoomStorage(croppedFile,chatID) async {
+    try {
+      String imageTimeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+      String filePath = 'chatrooms/$chatID/$imageTimeStamp';
+      final StorageReference storageReference = FirebaseStorage().ref().child(filePath);
+      final StorageUploadTask uploadTask = storageReference.putFile(croppedFile);
+      StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+      String result = await storageTaskSnapshot.ref.getDownloadURL();
+      return result;
+    }catch(e) {
+      print(e.message);
+    }
+  }
+
+  getUserChats(String myName) async {
     return await Firestore.instance
         .collection("chatRoom")
-        .where('users', arrayContains: itIsMyName)
+        .where('users', arrayContains: myName)
         .snapshots();
   }
 
