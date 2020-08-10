@@ -20,7 +20,7 @@ class DatabaseService {
     });
   }
 
-  Future updateUserData(String originalName, String username) async {
+  Future updateUserData(String username) async {
     return await userCollection.document(uid).updateData({
       'username': username
     });
