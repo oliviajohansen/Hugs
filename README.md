@@ -1,0 +1,2 @@
+# Hugs
+Our hugs app
