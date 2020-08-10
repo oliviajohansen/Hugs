@@ -32,6 +32,18 @@ class DatabaseService {
     });
   }
 
+  Future updateUserProfilePic(String profilePic) async {
+    return await userCollection.document(uid).updateData({
+      'profilePic': profilePic
+    });
+  }
+
+  Future updateUserBio(String bio) async {
+    return await userCollection.document(uid).updateData({
+      'bio': bio
+    });
+  }
+
   Stream<QuerySnapshot> get user {
     return userCollection.snapshots();
   }

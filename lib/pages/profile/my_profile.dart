@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
-
+import 'package:hugsmobileapp/pages/profile/settings.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -9,26 +11,51 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  int position = 4;
+  String uid;
+  Map<String, dynamic> userData;
+  String storedUsername = '';
+  String storedProfilePic = '';
+  String storedBio = '';
 
+  int position = 4;
   bool isHugsDelivered = true;
 
   List<String> imgsHugsDelivered = [
-    'images/A.jpg',
-    'images/B.jpg',
-    'images/C.jpg',
-    'images/D.jpg',
-    'images/Heart.png',
-    'images/Hug 1.png',
-    'images/Hug 2.png',
-    'images/Profile pic.png',
-    'images/Settings icon.png'
+    'assets/images/A.jpg',
+    'assets/images/B.jpg',
+    'assets/images/C.jpg',
+    'assets/images/D.jpg',
+    'assets/images/Heart.png',
+    'assets/images/Hug 1.png',
+    'assets/images/Hug 2.png',
+    'assets/images/Profile pic.png',
+    'assets/images/Settings icon.png'
   ];
 
   List<String> imgsHugsReceived = [
-    'images/Hug 1.png',
-    'images/Hug 2.png'
+    'assets/images/Hug 1.png',
+    'assets/images/Hug 2.png'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    getUID();
+  }
+
+  Future getUID() async {
+    final AuthService _auth = AuthService();
+    final userId = await _auth.getUserId();
+    final user = await Firestore.instance.collection('users').document(userId).get();
+
+    setState(() {
+      uid = userId;
+      userData = user.data;
+      storedUsername = userData['username'];
+      storedProfilePic = userData['profilePic'];
+      storedBio = userData['bio'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +69,16 @@ class _ProfileState extends State<Profile> {
                 child: Container(
                     padding: EdgeInsets.all(30.0),
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => Settings()
+                              ),
+                          );
+                        },
                         icon: Image.asset(
-                            'images/Settings icon.png',
+                            'assets/images/Settings icon.png',
                             scale: 15)
                     )
                 ),
@@ -57,10 +91,22 @@ class _ProfileState extends State<Profile> {
                       SizedBox(width: 28.0),
                       Column(
                           children: <Widget> [
-                            CircleAvatar(
-                              backgroundImage: AssetImage('images/Profile pic.png'),
-                              backgroundColor: Color(0xffE8E7E7),
-                              radius: 121/2,
+                            StreamBuilder<DocumentSnapshot>(
+                              stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                String dp = '';
+                                try {
+                                  dp = snapshot.data["profilePic"];
+                                } catch (Exception) {}
+                                if (snapshot.data == null) return CircularProgressIndicator();
+                                return CircleAvatar(
+                                  backgroundImage: dp.isNotEmpty
+                                      ? NetworkImage(dp)
+                                      : CircularProgressIndicator(),
+                                  backgroundColor: Color(0xffE8E7E7),
+                                  radius: 121/2,
+                                );
+                              }
                             ),
                             SizedBox(height: 5),
                             Container(
@@ -111,13 +157,22 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'Sarah Tan',
-                            style: TextStyle(
-                              fontSize: 21.0,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                            ),
+                          StreamBuilder<DocumentSnapshot>(
+                            stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              String username = '';
+                              try {
+                                username = snapshot.data["username"];
+                              } catch (Exception) {}
+                                if (snapshot.data == null) return CircularProgressIndicator();
+                                return new Text(username,
+                                  style: TextStyle(
+                                    fontSize: 21.0,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                );
+                            }
                           ),
                           Text(
                             'Life Lover',
@@ -128,15 +183,25 @@ class _ProfileState extends State<Profile> {
                               color: Color(0xff7A8FA6),
                             ),
                           ),
-                          Text(
-                            'Hello, nice to meet you!',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xff7A8FA6),
-                            ),
-                            maxLines: null,
+                          StreamBuilder<DocumentSnapshot>(
+                            stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              String bio = '';
+                              try {
+                                bio = snapshot.data["bio"];
+                              } catch (Exception) {}
+                              if (snapshot.data == null) return CircularProgressIndicator();
+                              return Text(
+                                bio,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xff7A8FA6),
+                                ),
+                                maxLines: null,
+                              );
+                            }
                           ),
                         ],
                       )
