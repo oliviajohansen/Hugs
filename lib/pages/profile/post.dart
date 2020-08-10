@@ -25,7 +25,7 @@ class _PostState extends State<Post> {
               ),
             ),
             SizedBox(width: 5),
-            Image.asset('images/Yellow dot.png')
+            Image.asset('assets/images/Yellow dot.png')
           ],
         ),
       ),
@@ -60,14 +60,14 @@ class _PostState extends State<Post> {
                 color: Color(0xffE7B1A3),
                 child: FittedBox(
                     fit: BoxFit.contain,
-                    child: Image.asset('images/Hug 1.png')
+                    child: Image.asset('assets/images/Hug 1.png')
                 ),
               ),
               SizedBox(height: 20),
               Row(
                 children: <Widget>[
                   CircleAvatar(
-                    child: Image.asset('images/Profile picture (Mocha).png'),
+                    child: Image.asset('assets/images/Profile picture (Mocha).png'),
                     backgroundColor: Colors.grey[200],
                     radius: 35,
                   ),
@@ -92,7 +92,7 @@ class _PostState extends State<Post> {
               SizedBox(height: 15),
               CircleAvatar(
                 backgroundColor: Colors.grey[200],
-                child: Image.asset('images/Hug button.png'),
+                child: Image.asset('assets/images/Hug button.png'),
                 radius: 35,
               )
             ],
