@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/authenticate/authenticate.dart';
 import 'package:hugsmobileapp/pages/authenticate/login.dart';
 import 'package:hugsmobileapp/services/auth.dart';
+import '../bottomNavBar.dart';
 
 
 class Reset extends StatefulWidget {
