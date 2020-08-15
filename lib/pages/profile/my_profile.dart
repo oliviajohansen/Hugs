@@ -71,10 +71,10 @@ class _ProfileState extends State<Profile> {
                     child: IconButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                              builder: (context) => Settings()
-                              ),
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Settings()
+                            ),
                           );
                         },
                         icon: Image.asset(
@@ -92,21 +92,21 @@ class _ProfileState extends State<Profile> {
                       Column(
                           children: <Widget> [
                             StreamBuilder<DocumentSnapshot>(
-                              stream: Firestore.instance.collection('users').document(uid).snapshots(),
-                              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                String dp = '';
-                                try {
-                                  dp = snapshot.data["profilePic"];
-                                } catch (Exception) {}
-                                if (snapshot.data == null) return CircularProgressIndicator();
-                                return CircleAvatar(
-                                  backgroundImage: dp.isNotEmpty
-                                      ? NetworkImage(dp)
-                                      : CircularProgressIndicator(),
-                                  backgroundColor: Color(0xffE8E7E7),
-                                  radius: 121/2,
-                                );
-                              }
+                                stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  String dp = '';
+                                  try {
+                                    dp = snapshot.data["profilePic"];
+                                  } catch (Exception) {}
+                                  if (snapshot.data == null) return CircularProgressIndicator();
+                                  return CircleAvatar(
+                                    backgroundImage: dp.isNotEmpty
+                                        ? NetworkImage(dp)
+                                        : CircularProgressIndicator(),
+                                    backgroundColor: Color(0xffE8E7E7),
+                                    radius: 121/2,
+                                  );
+                                }
                             ),
                             SizedBox(height: 5),
                             Container(
@@ -158,12 +158,12 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           StreamBuilder<DocumentSnapshot>(
-                            stream: Firestore.instance.collection('users').document(uid).snapshots(),
-                            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                              String username = '';
-                              try {
-                                username = snapshot.data["username"];
-                              } catch (Exception) {}
+                              stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                String username = '';
+                                try {
+                                  username = snapshot.data["username"];
+                                } catch (Exception) {}
                                 if (snapshot.data == null) return CircularProgressIndicator();
                                 return new Text(username,
                                   style: TextStyle(
@@ -172,7 +172,7 @@ class _ProfileState extends State<Profile> {
                                     fontWeight: FontWeight.w700,
                                   ),
                                 );
-                            }
+                              }
                           ),
                           Text(
                             'Life Lover',
@@ -184,24 +184,24 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           StreamBuilder<DocumentSnapshot>(
-                            stream: Firestore.instance.collection('users').document(uid).snapshots(),
-                            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                              String bio = '';
-                              try {
-                                bio = snapshot.data["bio"];
-                              } catch (Exception) {}
-                              if (snapshot.data == null) return CircularProgressIndicator();
-                              return Text(
-                                bio,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xff7A8FA6),
-                                ),
-                                maxLines: null,
-                              );
-                            }
+                              stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                String bio = '';
+                                try {
+                                  bio = snapshot.data["bio"];
+                                } catch (Exception) {}
+                                if (snapshot.data == null) return CircularProgressIndicator();
+                                return Text(
+                                  bio,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff7A8FA6),
+                                  ),
+                                  maxLines: null,
+                                );
+                              }
                           ),
                         ],
                       )
@@ -299,7 +299,7 @@ class _ProfileState extends State<Profile> {
             ],
           )
       ),
-        bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
