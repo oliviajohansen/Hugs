@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../pages/helper/helperFunctions.dart';
+import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 
 class DatabaseService {
 
@@ -36,6 +36,12 @@ class DatabaseService {
   Future updateUserBio(String bio) async {
     return await userCollection.document(uid).updateData({
       'bio': bio
+    });
+  }
+
+  Future updateUserAchievements(List achievements) async {
+    return await userCollection.document(uid).updateData({
+      'achievements': achievements
     });
   }
 
@@ -95,7 +101,6 @@ class DatabaseService {
         .where('users', arrayContains: itIsMyName)
         .snapshots();
   }
-
 }
 
 
