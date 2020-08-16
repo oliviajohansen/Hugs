@@ -7,7 +7,7 @@ class HelperFunctions {
   static String userEmailKey = "USEREMAIL";
 
 
-  // Saving data to shared preferences
+  // Saving data to shared preferences so that every file can access this information
 
   static Future <bool> saveUserLoggedIn(bool isLoggedIn) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -16,8 +16,8 @@ class HelperFunctions {
 
   static Future <bool> saveUsername(String username) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-//    print('save username');
-//    print(username);
+    print('save username');
+    print(username);
     return await prefs.setString(usernameKey, username);
   }
 
@@ -34,7 +34,7 @@ class HelperFunctions {
   }
 
   static Future <String> getUsername() async {
-//    print('get Username');
+    print('get Username');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return await prefs.getString(usernameKey);
   }
@@ -43,6 +43,5 @@ class HelperFunctions {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return await prefs.getString(userEmailKey);
   }
-
 
 }
