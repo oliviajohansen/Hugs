@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import '../pages/helper/helperFunctions.dart';
 import '../pages/helper/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-
-//Handles interaction with database
 
 class DatabaseService {
 
@@ -41,6 +39,12 @@ class DatabaseService {
   Future updateUserBio(String bio) async {
     return await userCollection.document(uid).updateData({
       'bio': bio
+    });
+  }
+
+  Future updateUserAchievements(List achievements) async {
+    return await userCollection.document(uid).updateData({
+      'achievements': achievements
     });
   }
 
@@ -147,7 +151,6 @@ class DatabaseService {
         .where('users', arrayContains: myName)
         .snapshots();
   }
-
 }
 
 

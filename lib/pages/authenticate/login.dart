@@ -71,12 +71,12 @@ class _LoginState extends State<Login> {
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color> [
-                        Color(0xffF8F9CD),
-                        Color(0xffFFE289)
-                      ]
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color> [
+                          Color(0xffF8F9CD),
+                          Color(0xffFFE289)
+                        ]
                     ),
                   ),
                 ),
@@ -128,60 +128,60 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget> [
-                            Container(
-                                padding: EdgeInsets.fromLTRB(25.0, 3.0, 0.0, 5.0),
-                                child: TextFormField(
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Username or Email",
-                                        hintStyle: TextStyle(
+                          key: _formKey,
+                          child: Column(
+                              children: <Widget> [
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(25.0, 3.0, 0.0, 5.0),
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Username or Email",
+                                          hintStyle: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 16,
                                             color: Colors.grey,
                                             fontWeight: FontWeight.w500,
-                                        ),
-                                      errorStyle: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.red,
-                                        fontSize: 12,
-                                      )
-                                    ),
-                                  controller: emailEditingController,
-                                  validator: (val) => val.isEmpty
-                                      ? 'Please enter an email'
-                                      : null,
-                                )
-                            ),
-                            Container(
-                                padding: EdgeInsets.fromLTRB(25.0, 5.0, 0.0, 3.0),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Password",
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
+                                          ),
+                                          errorStyle: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.red,
+                                            fontSize: 12,
+                                          )
                                       ),
-                                      errorStyle: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.red,
-                                        fontSize: 12,
-                                      )
-                                  ),
-                                  obscureText: true,
-                                  controller: passwordEditingController,
-                                  validator: (val) => val.length  < 6
-                                      ? 'Please enter minimum 6 characters'
-                                      : null,
-                                )
-                            ),
-                         ]
-                        )
+                                      controller: emailEditingController,
+                                      validator: (val) => val.isEmpty
+                                          ? 'Please enter an email'
+                                          : null,
+                                    )
+                                ),
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(25.0, 5.0, 0.0, 3.0),
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Password",
+                                          hintStyle: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16,
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          errorStyle: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.red,
+                                            fontSize: 12,
+                                          )
+                                      ),
+                                      obscureText: true,
+                                      controller: passwordEditingController,
+                                      validator: (val) => val.length  < 6
+                                          ? 'Please enter minimum 6 characters'
+                                          : null,
+                                    )
+                                ),
+                              ]
+                          )
                       ),
                       SizedBox(height: 15),
                       Padding(
@@ -218,36 +218,36 @@ class _LoginState extends State<Login> {
                         minWidth: 200,
                         height: 40,
                         child: RaisedButton(
-                          child: Text('Login',
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 21,
-                                  shadows: <Shadow> [
-                                    Shadow(
-                                      offset: Offset(2.5, 2.5),
-                                      color: Colors.grey.withOpacity(0.6),
-                                    )
-                                  ]
-                              )),
-                          color: Color(0XffFFE289),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              dynamic result = await _auth
-                                  .signInWithEmailAndPassword(
-                                  emailEditingController.text, passwordEditingController.text);
-                              if (result['user'] == null) {
-                                setState(() {
-                                  error = result['error'];
-                                });
-                              } else {
-                                HelperFunctions.saveUserLoggedIn(true);
-                                HelperFunctions.saveUserEmail(emailEditingController.text);
-                                print('successful login');
+                            child: Text('Login',
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 21,
+                                    shadows: <Shadow> [
+                                      Shadow(
+                                        offset: Offset(2.5, 2.5),
+                                        color: Colors.grey.withOpacity(0.6),
+                                      )
+                                    ]
+                                )),
+                            color: Color(0XffFFE289),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                dynamic result = await _auth
+                                    .signInWithEmailAndPassword(
+                                    emailEditingController.text, passwordEditingController.text);
+                                if (result['user'] == null) {
+                                  setState(() {
+                                    error = result['error'];
+                                  });
+                                } else {
+                                  HelperFunctions.saveUserLoggedIn(true);
+                                  HelperFunctions.saveUserEmail(emailEditingController.text);
+                                  print('successful login');
 //                                  if (storedUsername == "Your username") {
 //                                    print("new user");
 //                                    print(storedUsername);
@@ -255,15 +255,15 @@ class _LoginState extends State<Login> {
 //                                        builder: (context) => HomeList())
 //                                    );
 //                                  } else {
-                                print("current user");
-                                print(storedUsername);
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => Profile())
-                                );
-                                initStates();
+                                  print("current user");
+                                  print(storedUsername);
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => Profile())
+                                  );
+                                  initStates();
+                                }
                               }
                             }
-                          }
                         ),
                       ),
                       SizedBox(height: 10.0)
@@ -289,10 +289,10 @@ class _LoginState extends State<Login> {
                       ),
                       Text('Login with',
                           style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Colors.grey.withOpacity(0.6),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18
+                              fontFamily: 'Poppins',
+                              color: Colors.grey.withOpacity(0.6),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18
                             //fontSize: 20.0,
                           )
                       ),
@@ -316,8 +316,8 @@ class _LoginState extends State<Login> {
                       child: Ink.image(
                           image: AssetImage('assets/images/Facebook.png'),
                           fit: BoxFit.cover,
-                          width: 30.0,
-                          height: 30.0,
+                          width: 35.0,
+                          height: 35.0,
                           child: InkWell(
                             onTap: () async {
                               dynamic res = await _auth.signInWithFacebook();
@@ -337,8 +337,8 @@ class _LoginState extends State<Login> {
                       child: Ink.image(
                           image: AssetImage('assets/images/Google.png'),
                           fit: BoxFit.cover,
-                          width: 30.0,
-                          height: 30.0,
+                          width: 35.0,
+                          height: 35.0,
                           child: InkWell(
                             onTap: () async {
                               if(await _auth.signInWithGoogle()) {
@@ -358,7 +358,7 @@ class _LoginState extends State<Login> {
                       GestureDetector(
                         onTap: () {
                           widget.toggleView();
-                          },
+                        },
                         child: Text('New user? ',
                             style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -403,4 +403,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-

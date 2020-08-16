@@ -1,7 +1,8 @@
-class Hug {
+class Achievement {
   String image;
-  String achievement;
-  bool unlocked;
+  String title;
+//  String description;
+  bool isUnlocked = false;
 
-  Hug({this.image, this.achievement, this.unlocked});
+  Achievement({this.image, this.title});
 }
