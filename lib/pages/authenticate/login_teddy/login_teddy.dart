@@ -87,6 +87,7 @@ class _LoginTeddyState extends State<LoginTeddy> {
                             child: Padding(
                               padding: const EdgeInsets.all(30.0),
                               child: Form(
+                                key: _formKey,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,7 +97,11 @@ class _LoginTeddyState extends State<LoginTeddy> {
                                           hint: "What's your email address?",
                                           onCaretMoved: (Offset caret) {
                                             _teddyController.lookAt(caret);
-                                          }),
+                                          },
+                                          onTextChanged: (String value) {
+                                            emailEditingController.text = value;
+                                          }
+                              ),
                                       TrackingTextInput(
                                         label: "Password",
                                         hint: "Enter your Password",
@@ -106,6 +111,7 @@ class _LoginTeddyState extends State<LoginTeddy> {
                                           _teddyController.lookAt(null);
                                         },
                                         onTextChanged: (String value) {
+                                          passwordEditingController.text = value;
                                           _teddyController.setPassword(value);
                                         },
                                       ),
@@ -118,6 +124,8 @@ class _LoginTeddyState extends State<LoginTeddy> {
                                                   color: Colors.white)),
                                           onPressed: () async {
                                             if (_formKey.currentState.validate()) {
+                                              print(emailEditingController.text);
+                                              print(passwordEditingController.text);
                                               dynamic result = await _auth
                                                   .signInWithEmailAndPassword(
                                                   emailEditingController.text, passwordEditingController.text);

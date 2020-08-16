@@ -29,6 +29,7 @@ class _LoginState extends State<Login> {
   String storedUsername = '';
 
   TextEditingController emailEditingController = new TextEditingController();
+  // ignore: non_constant_identifier_names
   TextEditingController passwordEditingController = new TextEditingController();
 
   @override
