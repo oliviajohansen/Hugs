@@ -4,7 +4,4 @@ class Hug {
   bool unlocked;
 
   Hug({this.image, this.achievement, this.unlocked});
-
-
-
 }

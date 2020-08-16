@@ -50,7 +50,7 @@ class _HomeListState extends State<HomeList> {
             maxLength: 20,
             textAlign: TextAlign.center,
             onSubmitted: (val) async {
-              await DatabaseService(uid: uid).updateUserData(Constants.myName, val);
+              await DatabaseService(uid: uid).updateUserData(val);
               await HelperFunctions.saveUsername(_controller.text);
               Constants.myName = await HelperFunctions.getUsername();
             }

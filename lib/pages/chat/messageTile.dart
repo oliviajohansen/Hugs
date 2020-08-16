@@ -61,6 +61,9 @@ class MessageTile extends StatelessWidget {
         padding: EdgeInsets.only(
             top: 10, bottom: 10, left: 15, right: 15),
         decoration: BoxDecoration(
+            color: sendByMe
+                ? Color(0xff59B3CA)
+                : Colors.white,
             borderRadius: sendByMe ? BorderRadius.only(
                 topLeft: Radius.circular(23),
                 topRight: Radius.circular(23),
@@ -69,17 +72,7 @@ class MessageTile extends StatelessWidget {
             BorderRadius.only(
                 topLeft: Radius.circular(23),
                 topRight: Radius.circular(23),
-                bottomRight: Radius.circular(23)),
-            gradient: LinearGradient(
-              colors: sendByMe ? [
-                const Color(0xff007EF4),
-                const Color(0xff2A75BC)
-              ]
-                  : [
-                const Color(0xFF9E9E9E),
-                const Color(0xFF9E9E9E)
-              ],
-            )
+                bottomRight: Radius.circular(23))
         ),
         child: Column(
           crossAxisAlignment: sendByMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
@@ -88,19 +81,19 @@ class MessageTile extends StatelessWidget {
               ? Text(message,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.grey[850],
                   fontSize: 16,
-                  fontFamily: 'OverpassRegular',
-                  fontWeight: FontWeight.w300)
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400)
               )
               : _imageMessage(message),
             Text(formattedTime,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontFamily: 'OverpassRegular',
-                  fontWeight: FontWeight.w300
+                  color: Colors.grey[850],
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400
               ))
           ],
         ),

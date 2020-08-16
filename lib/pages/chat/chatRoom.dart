@@ -102,55 +102,76 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
    // WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            Text(widget.otherUsername),
-            SizedBox(width: 165),
-            Expanded(child: Image.asset(
-              "assets/images/bear.png",
-              height: 40,
-            )),
-          ],
+        backgroundColor: Colors.white,
+        elevation: 5,
+        title: Text(
+            widget.otherUsername,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 21,
+              color: Colors.grey[850],
+              fontWeight: FontWeight.w600,
+            )
         ),
-        elevation: 0.0,
-        centerTitle: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.grey[850],
+          iconSize: 30,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            padding: EdgeInsets.all(0),
+            icon: Image.asset("assets/images/bear.png", height: 30),
+          )
+        ],
+//        title: Row(
+//          children: <Widget>[
+//            Text(widget.otherUsername),
+//            SizedBox(width: 165),
+//            Expanded(child: Image.asset(
+//              "assets/images/bear.png",
+//              height: 40,
+//            )),
+//          ],
+//        ),
       ),
       body: Container(
-        color: Color(0xFFFFF0b2),
         child: Stack(
           children: [
-        new Container(
-        margin: const EdgeInsets.only(bottom: 55.0),
-          child : chatMessages(),
-        ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 55),
+              child : chatMessages(),
+            ),
             Container(alignment: Alignment.bottomCenter,
               width: MediaQuery
                   .of(context)
                   .size
                   .width,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
-                color: Color(0x54FFFFFF),
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: new IconButton(
-                        icon: new Icon(Icons.photo,color: Colors.cyan[900],),
-                          onPressed: () {
-                            PickImageController.instance.cropImageFromFile().then((croppedFile) async {
-                              if (croppedFile != null) {
-                                String imageDownloadUrl = await DatabaseService()
-                                    .saveImageInChatRoomStorage(croppedFile, widget.chatRoomId);
-                                addMessage(false, imageDownloadUrl);
-                              } else {
-                                print('Pick Image Cancelled');
-                              }
-                            });
-                          }
-                      )
+                    IconButton(
+                      icon: Icon(Icons.photo, color: Color(0xff59B3CA), size: 30,),
+                        onPressed: () {
+                          PickImageController.instance.cropImageFromFile().then((croppedFile) async {
+                            if (croppedFile != null) {
+                              String imageDownloadUrl = await DatabaseService()
+                                  .saveImageInChatRoomStorage(croppedFile, widget.chatRoomId);
+                              addMessage(false, imageDownloadUrl);
+                            } else {
+                              print('Pick Image Cancelled');
+                            }
+                          });
+                        }
                     ),
+                    SizedBox(width: 15),
                     Expanded(
                         child: TextField(
                           controller: messageEditingController,
@@ -158,39 +179,25 @@ class _ChatRoomState extends State<ChatRoom> {
                           decoration: InputDecoration(
                               hintText: "Message ...",
                               hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                                color: Colors.grey[850],
+                                fontWeight: FontWeight.w500,
                               ),
                               border: InputBorder.none,
                           ),
                         )
                     ),
-                    SizedBox(width: 16),
-                    GestureDetector(
-                      onTap: () {
+                    IconButton(
+                      onPressed: () {
                         bool isText = true;
                         if (messageEditingController.text == '') {
                           isText = false;
                         }
                         addMessage(isText, messageEditingController.text);
                       },
-                      child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    const Color(0x36FFFFFF),
-                                    const Color(0x0FFFFFFF)
-                                  ],
-                                  begin: FractionalOffset.topLeft,
-                                  end: FractionalOffset.bottomRight
-                              ),
-                              borderRadius: BorderRadius.circular(40)
-                          ),
-                          padding: EdgeInsets.all(12),
-                          child: Image.asset("assets/images/send.png",
-                            height: 25, width: 25,)),
+                      icon: Image.asset("assets/images/send.png",
+                        height: 25, width: 25, color: Color(0xff59B3CA),),
                     ),
                   ],
                 ),

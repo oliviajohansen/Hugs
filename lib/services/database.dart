@@ -20,7 +20,7 @@ class DatabaseService {
     });
   }
 
-  Future updateUserData(String originalName, String username) async {
+  Future updateUserData(String username) async {
     return await userCollection.document(uid).updateData({
       'username': username
     });
@@ -29,6 +29,18 @@ class DatabaseService {
   Future updateUserEmail(String email) async {
     return await userCollection.document(uid).updateData({
       'email': email
+    });
+  }
+
+  Future updateUserProfilePic(String profilePic) async {
+    return await userCollection.document(uid).updateData({
+      'profilePic': profilePic
+    });
+  }
+
+  Future updateUserBio(String bio) async {
+    return await userCollection.document(uid).updateData({
+      'bio': bio
     });
   }
 
