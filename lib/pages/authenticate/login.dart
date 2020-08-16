@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hugsmobileapp/pages/achievements/view.dart';
 import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import 'package:hugsmobileapp/pages/authenticate/reset.dart';
 import 'package:hugsmobileapp/pages/profile/my_profile.dart';
@@ -216,7 +217,7 @@ class _LoginState extends State<Login> {
                                     print("current user");
                                     print(storedUsername);
                                     Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => Profile())
+                                        builder: (context) => ViewPage())
                                     );
 //                                  }
                                 }
