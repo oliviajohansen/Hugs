@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/authenticate/login.dart';
+import 'package:hugsmobileapp/pages/authenticate/login_teddy/login_teddy.dart';
 import 'package:hugsmobileapp/pages/authenticate/sign_up.dart';
 
 class Authenticate extends StatefulWidget {
@@ -20,7 +21,7 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     return showLoginPage
-        ? Login(toggleView: toggleView)
+        ? LoginTeddy(toggleView: toggleView)
         : SignUp(toggleView: toggleView);
   }
 }

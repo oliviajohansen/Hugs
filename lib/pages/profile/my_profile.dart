@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hugsmobileapp/pages/profile/settings.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import '../bottomNavBar.dart';
+import 'package:hugsmobileapp/pages/profile/settings.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -18,7 +18,6 @@ class _ProfileState extends State<Profile> {
   String storedBio = '';
 
   int position = 4;
-
   bool isHugsDelivered = true;
 
   List<String> imgsHugsDelivered = [
@@ -29,7 +28,7 @@ class _ProfileState extends State<Profile> {
     'assets/images/Heart.png',
     'assets/images/Hug 1.png',
     'assets/images/Hug 2.png',
-    'assets/images/Profile picture.png',
+    'assets/images/Profile pic.png',
     'assets/images/Settings icon.png'
   ];
 
@@ -92,10 +91,22 @@ class _ProfileState extends State<Profile> {
                       SizedBox(width: 28.0),
                       Column(
                           children: <Widget> [
-                            CircleAvatar(
-                              backgroundImage: AssetImage('assets/images/Profile picture.png'),
-                              backgroundColor: Color(0xffE8E7E7),
-                              radius: 121/2,
+                            StreamBuilder<DocumentSnapshot>(
+                                stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  String dp = '';
+                                  try {
+                                    dp = snapshot.data["profilePic"];
+                                  } catch (Exception) {}
+                                  if (snapshot.data == null) return CircularProgressIndicator();
+                                  return CircleAvatar(
+                                    backgroundImage: dp.isNotEmpty
+                                        ? NetworkImage(dp)
+                                        : CircularProgressIndicator(),
+                                    backgroundColor: Color(0xffE8E7E7),
+                                    radius: 121/2,
+                                  );
+                                }
                             ),
                             SizedBox(height: 5),
                             Container(
@@ -146,13 +157,22 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'Sarah Tan',
-                            style: TextStyle(
-                              fontSize: 21.0,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                            ),
+                          StreamBuilder<DocumentSnapshot>(
+                              stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                String username = '';
+                                try {
+                                  username = snapshot.data["username"];
+                                } catch (Exception) {}
+                                if (snapshot.data == null) return CircularProgressIndicator();
+                                return new Text(username,
+                                  style: TextStyle(
+                                    fontSize: 21.0,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                );
+                              }
                           ),
                           Text(
                             'Life Lover',
@@ -163,15 +183,25 @@ class _ProfileState extends State<Profile> {
                               color: Color(0xff7A8FA6),
                             ),
                           ),
-                          Text(
-                            'Hello, nice to meet you!',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xff7A8FA6),
-                            ),
-                            maxLines: null,
+                          StreamBuilder<DocumentSnapshot>(
+                              stream: Firestore.instance.collection('users').document(uid).snapshots(),
+                              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                String bio = '';
+                                try {
+                                  bio = snapshot.data["bio"];
+                                } catch (Exception) {}
+                                if (snapshot.data == null) return CircularProgressIndicator();
+                                return Text(
+                                  bio,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff7A8FA6),
+                                  ),
+                                  maxLines: null,
+                                );
+                              }
                           ),
                         ],
                       )
@@ -269,7 +299,7 @@ class _ProfileState extends State<Profile> {
             ],
           )
       ),
-        bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

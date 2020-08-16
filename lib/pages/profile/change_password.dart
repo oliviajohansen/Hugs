@@ -96,20 +96,26 @@ class _ChangePasswordState extends State<ChangePassword> {
               print("Auth Credential: ${authCredential.toString()}");
               user.reauthenticateWithCredential(authCredential).then((result) {
                 setState(() {
-                  error = "Success: $result";
+                  error = "Authentication Success!";
                 });
-                user.updatePassword(_newPassword).then((result) {
-                  setState(() {
-                    error = "Password updated.";
+                if (_newPassword2 == _newPassword) {
+                  user.updatePassword(_newPassword).then((result) {
+                    setState(() {
+                      error = "Password had been updated successfully.";
+                    });
+                  }).catchError((result) {
+                    setState(() {
+                      error = "An error occurred while changing the password: " + result.message;
+                    });
                   });
-                }).catchError((result) {
+                } else {
                   setState(() {
-                    error = "An error occurred while changing the password: " + result.message;
+                    error = "An error occurred while changing the password: Your new passwords are mismatched.";
                   });
-                });
+                }
               }).catchError((result) {
                 setState(() {
-                  error = "[Old Password] " + result.message;
+                  error = "Authentication Failure: Your old password is invalid.";
                 });
               });
             },
@@ -118,36 +124,36 @@ class _ChangePasswordState extends State<ChangePassword> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text(
-                    "Old password:",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xff272727)
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text(
+                      "Old password:",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xff272727)
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Form(
-                key: oldPasswordFormKey,
-                child: TextFormField(
-                  decoration: InputDecoration(
+                Form(
+                  key: oldPasswordFormKey,
+                  child: TextFormField(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Old Password",
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xffFFC000),
-                            width: 3
-                        )
+                          borderSide: BorderSide(
+                              color: Color(0xffFFC000),
+                              width: 3
+                          )
                       ),
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -161,135 +167,136 @@ class _ChangePasswordState extends State<ChangePassword> {
                               width: 3
                           )
                       ),
-                    errorStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.red
+                      errorStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.red
+                      ),
                     ),
-                  ),
-                  obscureText: true,
-                  validator: (val) => val.isEmpty ? 'Enter your old password.' : null,
-                  onChanged: (val) {
-                    _oldPassword = val;
-                  },
-                ),
-              ),
-              SizedBox(height: 30),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text(
-                    "New password:",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xff272727)
-                    ),
+                    obscureText: true,
+                    validator: (val) => val.isEmpty ? 'Enter your old password.' : null,
+                    onChanged: (val) {
+                      _oldPassword = val;
+                    },
                   ),
                 ),
-              ),
-              Form(
-                key: newPasswordFormKey,
-                child: TextFormField(
-                  decoration: InputDecoration(
+                SizedBox(height: 30),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text(
+                      "New password:",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xff272727)
+                      ),
+                    ),
+                  ),
+                ),
+                Form(
+                  key: newPasswordFormKey,
+                  child: TextFormField(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "New Password",
                       hintStyle: TextStyle(color: Colors.grey[400]),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color(0xffFFC000),
-                            width: 3
-                        )
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color(0xffFFC000),
+                              width: 3
+                          )
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color(0xff59B3CA),
+                              width: 3
+                          )
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.red,
+                              width: 3
+                          )
+                      ),
+                      errorStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.red
+                      ),
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color(0xff59B3CA),
-                            width: 3
-                        )
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.red,
-                            width: 3
-                        )
-                    ),
-                    errorStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.red
-                    ),
-                  ),
-                  obscureText: true,
-                  validator: (val) => val.isEmpty ? 'Enter your new password.' : null,
-                  onChanged: (val) {
-                    _newPassword = val;
-                  },
-                ),
-              ),
-              SizedBox(height: 30),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text(
-                    "Confirm new password:",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xff272727)
-                    ),
+                    obscureText: true,
+                    validator: (val) => val.length  < 6
+                        ? 'Please enter minimum 6 characters'
+                        : null,
+                    onChanged: (val) {
+                      _newPassword = val;
+                    },
                   ),
                 ),
-              ),
-              Form(
-                key: newPasswordFormKey2,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "New Password",
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color(0xffFFC000),
-                            width: 3
-                        )
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color(0xff59B3CA),
-                            width: 3
-                        )
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.red,
-                            width: 3
-                        )
-                    ),
-                    errorStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.red
+                SizedBox(height: 30),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text(
+                      "Confirm new password:",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xff272727)
+                      ),
                     ),
                   ),
-                  obscureText: true,
-                  validator: (val) => val.isEmpty ? 'Enter your new password.' : null,
-                  onChanged: (val) {
-                    _newPassword2 = val;
-                    if (_newPassword2 == _newPassword) {
-                      print("new password matched");
-                    } else {}
-                  },
                 ),
-              ),
-              SizedBox(height: 20.0),
-              Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0)),
-            ],
-          )
+                Form(
+                  key: newPasswordFormKey2,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "New Password",
+                      hintStyle: TextStyle(color: Colors.grey[400]),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color(0xffFFC000),
+                              width: 3
+                          )
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color(0xff59B3CA),
+                              width: 3
+                          )
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.red,
+                              width: 3
+                          )
+                      ),
+                      errorStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.red
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: (val) => val.length  < 6
+                        ? 'Please enter minimum 6 characters'
+                        : null,
+                    onChanged: (val) {
+                      _newPassword2 = val;
+                    },
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0)),
+              ],
+            )
         ),
       ),
     );
