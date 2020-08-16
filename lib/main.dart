@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hugsmobileapp/models/hug.dart';
 import 'package:hugsmobileapp/pages/authenticate/login_teddy/login_teddy.dart';
 import 'services/auth.dart';
 import 'pages/helper/wrapper.dart';
