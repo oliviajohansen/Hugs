@@ -316,8 +316,8 @@ class _LoginState extends State<Login> {
                       child: Ink.image(
                           image: AssetImage('assets/images/Facebook.png'),
                           fit: BoxFit.cover,
-                          width: 35.0,
-                          height: 35.0,
+                          width: 30.0,
+                          height: 30.0,
                           child: InkWell(
                             onTap: () async {
                               dynamic res = await _auth.signInWithFacebook();
@@ -337,8 +337,8 @@ class _LoginState extends State<Login> {
                       child: Ink.image(
                           image: AssetImage('assets/images/Google.png'),
                           fit: BoxFit.cover,
-                          width: 35.0,
-                          height: 35.0,
+                          width: 30.0,
+                          height: 30.0,
                           child: InkWell(
                             onTap: () async {
                               if(await _auth.signInWithGoogle()) {
