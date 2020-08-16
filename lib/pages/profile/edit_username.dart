@@ -101,48 +101,48 @@ class _EditUsernameState extends State<EditUsername> {
       ),
       body: SafeArea(
         child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: Form(
-                  key: editUsernameFormKey,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color(0xffFFC000),
-                              width: 3
-                          )
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color(0xff59B3CA),
-                              width: 3
-                          )
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.red,
-                              width: 3
-                          )
-                      ),
-                      errorStyle: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.red
-                      ),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Form(
+                key: editUsernameFormKey,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color(0xffFFC000),
+                            width: 3
+                        )
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter a username' : null,
-                    onChanged: (val) {
-                      _username = val;
-                    },
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color(0xff59B3CA),
+                            width: 3
+                        )
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.red,
+                            width: 3
+                        )
+                    ),
+                    errorStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.red
+                    ),
                   ),
+                  validator: (val) => val.isEmpty ? 'Enter a username' : null,
+                  onChanged: (val) {
+                    _username = val;
+                  },
                 ),
               ),
-              SizedBox(height: 10.0),
-              Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0)),
-            ],
+            ),
+            SizedBox(height: 10.0),
+            Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0)),
+          ],
         ),
       ),
     );
