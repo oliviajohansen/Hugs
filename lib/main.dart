@@ -4,6 +4,7 @@ import 'package:hugsmobileapp/pages/authenticate/authenticate.dart';
 import 'package:hugsmobileapp/pages/authenticate/login_teddy/login_teddy.dart';
 import 'package:hugsmobileapp/pages/authenticate/sign_up.dart';
 import 'package:hugsmobileapp/pages/chat/chats.dart';
+import 'package:hugsmobileapp/pages/home/HomePage1.dart';
 import 'package:hugsmobileapp/pages/home/home.dart';
 import 'package:hugsmobileapp/pages/new_hug/hug.dart';
 import 'package:hugsmobileapp/pages/new_hug/hug2.dart';
