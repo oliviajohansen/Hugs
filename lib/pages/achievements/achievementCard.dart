@@ -3,13 +3,30 @@ import '../../models/hug.dart';
 
 class AchievementCard extends StatelessWidget {
 
-  final List<Hug> hugs = [
-    Hug(image: 'bear.png', achievement: 'Bear Hugger')
+  List<Achievement> achievements = [
+    Achievement(image: 'bear.png', title: 'Bear Hugger'),
+    Achievement(image: 'best.png', title: 'Cozy Hugger'),
+    Achievement(image: 'first.png', title: 'Hug streak 1'),
+    Achievement(image: 'friendship.png', title: 'Friendly Hugger'),
+    Achievement(image: 'grandma.png', title: 'Grandma Hugger'),
+    Achievement(image: 'quick.png', title: 'Quick Hugger'),
+    Achievement(image: 'side.png', title: 'Side Hugger'),
+    Achievement(image: 'warm.png', title: 'Warm Hugger'),
+    Achievement(image: 'chill.png', title: 'Chill Hugger'),
+    Achievement(image: 'bear.png', title: 'Bear Hugger'),
+    Achievement(image: 'best.png', title: 'Cozy Hugger'),
+    Achievement(image: 'first.png', title: 'Hug streak 1'),
+    Achievement(image: 'friendship.png', title: 'Friendly Hugger'),
+    Achievement(image: 'grandma.png', title: 'Grandma Hugger'),
+    Achievement(image: 'quick.png', title: 'Quick Hugger'),
+    Achievement(image: 'side.png', title: 'Side Hugger'),
+    Achievement(image: 'warm.png', title: 'Warm Hugger'),
+    Achievement(image: 'chill.png', title: 'Chill Hugger')
   ];
 
   @override
   Widget build(BuildContext context) {
-    int index = 0;
+    int index = 1;
     return Stack(
       //alignment: Alignment.topCenter,
         children: <Widget>[
@@ -33,7 +50,7 @@ class AchievementCard extends StatelessWidget {
                         child: Ink(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/' + hugs[index].image),
+                              image: AssetImage('assets/images/' + achievements[index].image),
                               fit: BoxFit.fitHeight,
                             ),
                           ),
@@ -51,7 +68,7 @@ class AchievementCard extends StatelessWidget {
                           maxRadius: 8,
                           backgroundColor: Colors.white,
                         ),
-                        Text(hugs[index].achievement, style: TextStyle(fontFamily: 'Poppins')),
+                        Text(achievements[index].title, style: TextStyle(fontFamily: 'Poppins')),
                       ],
                     ),
                   ],

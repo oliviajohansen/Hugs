@@ -60,12 +60,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Browse photos for Hugs app</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Take photo for Hugs app</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Use voice recognition for Hugs app</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
