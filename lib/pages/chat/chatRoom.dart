@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hugsmobileapp/services/auth.dart';
@@ -21,43 +23,54 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
-  AuthService _auth = AuthService();
 
-
-//  //auto scroll to bottom
-//  ScrollController _scrollController = new ScrollController();
-//  _scrollToBottom() {
-//    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-//  }
+  //auto scroll to bottom
+  ScrollController _scrollController = new ScrollController();
+  _scrollToBottom() {
+    _scrollController.hasClients
+        ? _scrollController.jumpTo(_scrollController.position.maxScrollExtent)
+    : print('ScrollController position empty, not attached to any scroll views');
+  }
 
   Widget chatMessages(){
     return StreamBuilder(
       stream: chats,
+      // ignore: missing_return
       builder: (context, snapshot){
-        return snapshot.hasData ?  ListView.builder(
-            itemCount: snapshot.data.documents.length,
-//         controller: _scrollController,
-//            reverse: true,
-//            shrinkWrap: true,
-            itemBuilder: (context, index){
-//              _scrollToBottom();
-              return snapshot.data.documents[index].data["messageType"] == 'image'
-                  ? MessageTile(
-                      message: snapshot.data.documents[index].data["message"],
-                      sendByMe: Constants.myUid == snapshot.data.documents[index].data["sendBy"],
-                      time: snapshot.data.documents[index].data["time"],
-                      isText: false,
-                      context: context
-                    )
-                  : MessageTile(
+        if (snapshot.hasData) {
+          return Container(
+            padding: EdgeInsets.only(bottom:50),
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                Timer(
+                    Duration(milliseconds: 350),
+                        () => _scrollToBottom()
+                );
+                return snapshot.data.documents[index].data["messageType"] ==
+                    'image'
+                    ? MessageTile(
                     message: snapshot.data.documents[index].data["message"],
-                    sendByMe: Constants.myUid == snapshot.data.documents[index].data["sendBy"],
+                    sendByMe: Constants.myUid ==
+                        snapshot.data.documents[index].data["sendBy"],
+                    time: snapshot.data.documents[index].data["time"],
+                    isText: false,
+                    context: context
+                )
+                    : MessageTile(
+                    message: snapshot.data.documents[index].data["message"],
+                    sendByMe: Constants.myUid ==
+                        snapshot.data.documents[index].data["sendBy"],
                     time: snapshot.data.documents[index].data["time"],
                     isText: true
-                  );
-            },
-            )
-            : Container();
+                );
+              },
+            ),
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }
@@ -96,11 +109,19 @@ class _ChatRoomState extends State<ChatRoom> {
       });
     });
     super.initState();
+    Timer(
+        Duration(milliseconds: 350),
+            () => _scrollToBottom()
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-   // WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+    Timer(
+      Duration(milliseconds: 350),
+          () => _scrollToBottom()
+    );
+   //WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
@@ -130,16 +151,6 @@ class _ChatRoomState extends State<ChatRoom> {
             icon: Image.asset("assets/images/bear.png", height: 30),
           )
         ],
-//        title: Row(
-//          children: <Widget>[
-//            Text(widget.otherUsername),
-//            SizedBox(width: 165),
-//            Expanded(child: Image.asset(
-//              "assets/images/bear.png",
-//              height: 40,
-//            )),
-//          ],
-//        ),
       ),
       body: Container(
         child: Stack(
@@ -177,7 +188,7 @@ class _ChatRoomState extends State<ChatRoom> {
                           controller: messageEditingController,
                           style: TextStyle(color: Colors.black, fontSize: 16),
                           decoration: InputDecoration(
-                              hintText: "Message ...",
+                              hintText: "Message",
                               hintStyle: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
