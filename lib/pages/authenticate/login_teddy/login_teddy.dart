@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:hugsmobileapp/pages/authenticate/login_teddy/signin_button.dart';
 import 'package:hugsmobileapp/pages/authenticate/login_teddy/teddy_controller.dart';
 import 'package:hugsmobileapp/pages/authenticate/login_teddy/tracking_text_input.dart';
+import 'package:hugsmobileapp/pages/helper/constants.dart';
 import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import 'package:hugsmobileapp/services/auth.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/rendering.dart';
+import 'package:hugsmobileapp/services/database.dart';
 
 class LoginTeddy extends StatefulWidget {
 
@@ -33,6 +35,15 @@ class _LoginTeddyState extends State<LoginTeddy> {
 
   TextEditingController emailEditingController = new TextEditingController();
   TextEditingController passwordEditingController = new TextEditingController();
+
+  initStates() async {
+    HelperFunctions.saveUserLoggedIn(true);
+    HelperFunctions.saveUserEmail(emailEditingController.text);
+    String username = await DatabaseService().getUsernameByUserEmail(emailEditingController.text);
+    HelperFunctions.saveUsername(username);
+    Constants.myName = username;
+    Constants.myUid = await _auth.getUserId();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,8 +135,6 @@ class _LoginTeddyState extends State<LoginTeddy> {
                                                   color: Colors.white)),
                                           onPressed: () async {
                                             if (_formKey.currentState.validate()) {
-                                              print(emailEditingController.text);
-                                              print(passwordEditingController.text);
                                               dynamic result = await _auth
                                                   .signInWithEmailAndPassword(
                                                   emailEditingController.text, passwordEditingController.text);
@@ -134,8 +143,7 @@ class _LoginTeddyState extends State<LoginTeddy> {
                                                   error = result['error'];
                                                 });
                                               } else {
-                                                HelperFunctions.saveUserLoggedIn(true);
-                                                HelperFunctions.saveUserEmail(emailEditingController.text);
+                                                initStates();
                                                 print('successful login');
                                               }
                                             }
@@ -193,9 +201,13 @@ class _LoginTeddyState extends State<LoginTeddy> {
                             width: 35.0,
                             height: 35.0,
                             child: InkWell(
-                              onTap: () {
-                                _auth.signInWithFacebook();
-                              },
+                            onTap: () async {
+                              dynamic res = await _auth.signInWithFacebook();
+                              if (res != false) {
+                                emailEditingController.text = res;
+                                initStates();
+                              }
+                            }
                             )
                         ),
                       ),
@@ -210,8 +222,10 @@ class _LoginTeddyState extends State<LoginTeddy> {
                             width: 35.0,
                             height: 35.0,
                             child: InkWell(
-                              onTap: () {
-                                _auth.signInWithGoogle();
+                              onTap: () async {
+                                if(await _auth.signInWithGoogle()) {
+                                  initStates();
+                                }
                               },
                             )
                         ),

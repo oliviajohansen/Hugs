@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hugsmobileapp/pages/helper/constants.dart';
+import 'package:hugsmobileapp/pages/helper/helperFunctions.dart';
 import 'package:hugsmobileapp/services/database.dart';
 import 'dart:convert';
 
@@ -57,6 +59,7 @@ class AuthService {
     }
   }
 
+
   //login with facebook
   signInWithFacebook() async {
     FacebookLogin facebookLogin = FacebookLogin();
@@ -79,9 +82,11 @@ class AuthService {
       databaseService.createNewDocument();
       databaseService.updateUserEmail(email);
 
+
+
       //get friends list
       final friendsListResponse = await http.get(
-          "https://graph.facebook.com/v7.0/${uidFriends}/friends?access_token=${token}"
+          "https://graph.facebook.com/v8.0/${uidFriends}/friends?access_token=${token}"
       );
 
       print(jsonDecode(friendsListResponse.body));

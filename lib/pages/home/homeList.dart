@@ -22,6 +22,8 @@ class _HomeListState extends State<HomeList> {
   void initState() {
     super.initState();
     getUID();
+    print(uid);
+    print(userData);
   }
 
 
