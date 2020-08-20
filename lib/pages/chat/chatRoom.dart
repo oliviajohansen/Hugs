@@ -23,10 +23,6 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
-  AuthService _auth = AuthService();
-  int currMessagesCount;
-  int newMessagesCount;
-
 
   //auto scroll to bottom
   ScrollController _scrollController = new ScrollController();
